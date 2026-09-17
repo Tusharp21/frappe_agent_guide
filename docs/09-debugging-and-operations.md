@@ -1,10 +1,10 @@
-# Part 9 — Debugging & Operations (Sections 70-77)
+# Part 9 — Debugging & Operations
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 70. Debugging Workflow
+## Debugging Workflow
 
 When a feature does not work:
 
@@ -29,7 +29,7 @@ First identify where the failure occurs.
 
 ---
 
-# 71. Frontend Debugging
+## Frontend Debugging
 
 Check:
 
@@ -63,7 +63,7 @@ UI updated?
 
 ---
 
-# 72. Backend Debugging
+## Backend Debugging
 
 Check:
 
@@ -88,7 +88,7 @@ frappe.log_error(
 
 ---
 
-# 73. Database Transaction Awareness
+## Database Transaction Awareness
 
 Frappe document operations generally participate in database transactions.
 
@@ -111,32 +111,13 @@ unless there is a specific, understood reason.
 
 ---
 
-# 74. Security Rules
+## Security Rules
 
-Security-sensitive functionality must always be implemented server-side.
-
-Never trust:
-
-```text
-Hidden UI fields
-Disabled buttons
-Client-side validation
-Client-provided permissions
-```
-
-Validate important operations on the server.
-
-Protect:
-
-- Passwords
-- Tokens
-- API keys
-- Integration credentials
-- Sensitive business data
+Before shipping, re-confirm the security rules from earlier chapters: security-sensitive functionality is implemented server-side, not trusted to hidden UI fields, disabled buttons, or client-side validation/permissions ("Whitelisted Methods" and "Permissions" in `docs/04-security-and-backend.md`); and secrets — passwords, tokens, API keys, integration credentials, sensitive business data — stay protected end-to-end ("Passwords and Secrets" in `docs/04-security-and-backend.md`).
 
 ---
 
-# 75. Documentation Rule
+## Documentation Rule
 
 New complex functionality should be documented.
 
@@ -161,7 +142,7 @@ Document the **why**, not only the **what**.
 
 ---
 
-# 76. Change Management
+## Change Management
 
 For every significant feature, identify whether the change includes:
 
@@ -182,7 +163,7 @@ A feature is not considered complete until all required components are handled.
 
 ---
 
-# 77. Deployment Checklist
+## Deployment Checklist
 
 Before deployment:
 

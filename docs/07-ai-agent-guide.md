@@ -1,26 +1,26 @@
-# Part 7 — AI Agent Guide: Git, Review & Workflow (Sections 56-61)
+# Part 7 — AI Agent Guide: Git, Review & Workflow
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 56. Git Rules
+## Git Rules
 
 Git workflow, branch naming, commit conventions, and safety rules (including which files must never be committed) are defined in [`GIT_WORKFLOW.md`](../GIT_WORKFLOW.md). That document is the single source of truth for all Git operations — follow it instead of duplicating its rules here.
 
 ---
 
-# 57. Code Review Checklist
+## Code Review Checklist
 
 The self-review checklist an AI agent must run after implementation is defined in [`workflow/REVIEW.md`](../workflow/REVIEW.md). That document is the single source of truth for post-implementation review — follow it instead of duplicating its checklist here.
 
 ---
 
-# 58. AI Coding Agent Workflow
+## AI Coding Agent Workflow
 
 The overall process — understanding the requirement, inspecting the system, and stopping for approval before coding — is defined in [`workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md). The steps below are the Frappe-specific technical checklist to apply *within* that process, not a replacement for it.
 
-## Step 1 — Understand the Requirement
+### Step 1 — Understand the Requirement
 
 Identify:
 
@@ -36,7 +36,7 @@ Does configuration exist?
 
 ---
 
-## Step 2 — Search Existing Code
+### Step 2 — Search Existing Code
 
 Before creating anything, search for:
 
@@ -53,41 +53,13 @@ existing customizations
 
 ---
 
-## Step 3 — Identify the Correct Extension Point
+### Step 3 — Identify the Correct Extension Point
 
-Choose the smallest appropriate extension point.
-
-Decision:
-
-```text
-UI behavior?
-    → Client Script
-
-Small document event?
-    → Server Script
-
-Complex/reusable business logic?
-    → Python
-
-Application-wide event?
-    → hooks.py
-
-Existing data migration?
-    → Patch
-
-Deployable configuration record?
-    → Fixture
-
-Administrator-controlled behavior?
-    → Settings
-
-Field/metadata customization?
-    → Custom Field + Export
-```
+Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./05-business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `docs/02-doctype-development.md`).
 
 ---
 
-# 59. AI Agent File Placement Rules
+## AI Agent File Placement Rules
 
 The AI agent should follow these conventions.
 
@@ -146,7 +118,7 @@ templates/
 
 ---
 
-# 60. AI Agent Rules — Do Not
+## AI Agent Rules — Do Not
 
 The AI agent must NOT:
 
@@ -170,7 +142,7 @@ The AI agent must NOT:
 
 ---
 
-# 61. AI Agent Rules — Must
+## AI Agent Rules — Must
 
 The AI agent MUST:
 

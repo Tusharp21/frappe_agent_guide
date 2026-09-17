@@ -1,10 +1,10 @@
-# Part 6 — Conventions, Testing & Migration Safety (Sections 51-55)
+# Part 6 — Conventions, Testing & Migration Safety
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 51. Naming Conventions
+## Naming Conventions
 
 Use clear, descriptive names.
 
@@ -40,7 +40,7 @@ calculateBillingValue()
 
 ---
 
-# 52. File Naming
+## File Naming
 
 Prefer names based on the Doctype or responsibility.
 
@@ -65,7 +65,7 @@ abc.py
 
 ---
 
-# 53. Testing
+## Testing
 
 New business-critical functionality should have appropriate tests.
 
@@ -89,9 +89,11 @@ class TestMyDoctype(FrappeTestCase):
         ...
 ```
 
+Linting and formatting (ruff, and the pre-commit hooks that run it) are covered in ["Pre-commit Hooks (Linting)"](../GIT_WORKFLOW.md#pre-commit-hooks-linting) in `GIT_WORKFLOW.md` — code must pass those hooks, not just tests.
+
 ---
 
-# 54. Validation Strategy
+## Validation Strategy
 
 Important business rules should be validated on the server.
 
@@ -113,7 +115,7 @@ because API calls, imports, background jobs, console operations, and other serve
 
 ---
 
-# 55. Migration Safety
+## Migration Safety
 
 When changing existing fields or data:
 

@@ -1,10 +1,10 @@
-# Part 1 — Architecture, Philosophy & Bench (Sections 1-9)
+# Part 1 — Architecture, Philosophy & Bench
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 1. Purpose
+## Purpose
 
 This document defines how Frappe/ERPNext development must be performed in this project.
 
@@ -32,7 +32,7 @@ When implementing a new feature or modifying existing functionality, the develop
 
 ---
 
-# 2. Core Development Philosophy
+## Core Development Philosophy
 
 The project follows a **Doctype-centric development approach**.
 
@@ -40,26 +40,15 @@ The primary principle is:
 
 > Organize functionality around the relevant Doctype while keeping configuration, customization, business logic, and framework code properly separated.
 
-The preferred development order is:
-
-1. Use standard Frappe/ERPNext functionality when it already solves the requirement.
-2. Use customization mechanisms for metadata changes.
-3. Use hooks for application-level behavior.
-4. Use Client Scripts for Doctype-specific frontend behavior.
-5. Use Server Scripts for small event-specific server logic.
-6. Use Python application code for reusable or complex business logic.
-7. Use Settings for configurable behavior.
-8. Use fixtures for records that must be version-controlled.
-9. Use patches for database/data migrations.
-10. Avoid modifying standard Frappe/ERPNext source code directly.
+Always prefer standard Frappe/ERPNext functionality and supported customization mechanisms over new code, and never modify standard Frappe/ERPNext source directly (see "Do Not Modify Standard Frappe/ERPNext Code Directly" below). For the full decision framework on which extension point (Client Script, Server Script, Python, hooks.py, Patch, Fixture, or Settings) to use for a given requirement, see ["Business Logic Placement"](./05-business-logic-and-jobs.md).
 
 ---
 
-# 3. Golden Rules
+## Golden Rules
 
 The following rules apply throughout the project.
 
-## 3.1 Do Not Duplicate Existing Functionality
+### Do Not Duplicate Existing Functionality
 
 Before creating new code:
 
@@ -78,7 +67,7 @@ If functionality already exists, extend or reuse it instead of creating a duplic
 
 ---
 
-## 3.2 Do Not Modify Standard Frappe/ERPNext Code Directly
+### Do Not Modify Standard Frappe/ERPNext Code Directly
 
 Do not directly edit files inside standard Frappe or ERPNext applications unless there is an explicit architectural reason.
 
@@ -107,7 +96,7 @@ Examples:
 
 ---
 
-## 3.3 Configuration Must Not Be Hardcoded
+### Configuration Must Not Be Hardcoded
 
 Values that can change by:
 
@@ -125,7 +114,7 @@ Use the appropriate Settings/configuration mechanism.
 
 ---
 
-## 3.4 Keep Code Close to Its Doctype
+### Keep Code Close to Its Doctype
 
 When code belongs to a specific Doctype, it should be easy to locate by searching for that Doctype.
 
@@ -141,7 +130,7 @@ Sales Order
 
 ---
 
-# 4. Frappe Architecture Overview
+## Frappe Architecture Overview
 
 A typical Frappe installation consists of:
 
@@ -197,9 +186,9 @@ The exact structure may differ depending on the application, but the project sho
 
 ---
 
-# 5. Bench
+## Bench
 
-## 5.1 What is Bench?
+### What is Bench?
 
 Bench is the command-line environment/tooling used to manage Frappe sites and applications.
 
@@ -219,7 +208,7 @@ It is commonly used for:
 
 ---
 
-# 6. Important Bench Commands
+## Important Bench Commands
 
 Commands should generally be executed from the bench directory.
 
@@ -231,7 +220,7 @@ cd /path/to/frappe-bench
 
 ---
 
-## 6.1 Start Development Environment
+### Start Development Environment
 
 ```bash
 bench start
@@ -241,7 +230,7 @@ Starts the development processes required for local development.
 
 ---
 
-## 6.2 List Sites
+### List Sites
 
 ```bash
 bench --site all list-apps
@@ -255,7 +244,7 @@ bench --site site-name list-apps
 
 ---
 
-## 6.3 List Installed Apps
+### List Installed Apps
 
 ```bash
 bench --site site-name list-apps
@@ -263,7 +252,7 @@ bench --site site-name list-apps
 
 ---
 
-## 6.4 Migrate Site
+### Migrate Site
 
 ```bash
 bench --site site-name migrate
@@ -273,7 +262,7 @@ Migration should be performed after changes that require database/schema synchro
 
 ---
 
-## 6.5 Clear Cache
+### Clear Cache
 
 ```bash
 bench --site site-name clear-cache
@@ -289,7 +278,7 @@ When debugging stale metadata, permissions, routes, or cached configuration, cle
 
 ---
 
-## 6.6 Build Assets
+### Build Assets
 
 ```bash
 bench build
@@ -299,7 +288,7 @@ For development changes involving frontend assets, rebuild when necessary.
 
 ---
 
-## 6.7 Restart Services
+### Restart Services
 
 Depending on the environment:
 
@@ -311,7 +300,7 @@ Production environments may use Supervisor/systemd or other process managers dep
 
 ---
 
-## 6.8 Console
+### Console
 
 Open a Frappe console:
 
@@ -340,7 +329,7 @@ Avoid making uncontrolled production data changes.
 
 ---
 
-## 6.9 Run Tests
+### Run Tests
 
 Example:
 
@@ -358,7 +347,7 @@ Tests should be run for functionality that has automated test coverage.
 
 ---
 
-## 6.10 Update
+### Update
 
 ```bash
 bench update
@@ -372,7 +361,7 @@ Always understand what will change before updating.
 
 ---
 
-# 7. Site Configuration
+## Site Configuration
 
 Frappe uses configuration files at different levels.
 
@@ -385,7 +374,7 @@ sites/site-name/site_config.json
 
 ---
 
-## 7.1 `common_site_config.json`
+### `common_site_config.json`
 
 Contains configuration shared across sites in the bench.
 
@@ -399,7 +388,7 @@ Typical examples may include:
 
 ---
 
-## 7.2 `site_config.json`
+### `site_config.json`
 
 Site-specific configuration.
 
@@ -423,7 +412,7 @@ Do not commit secrets or sensitive values unless the project's deployment/securi
 
 ---
 
-# 8. `config/`
+## `config/`
 
 The bench-level `config/` directory generally contains process/deployment configuration.
 
@@ -453,7 +442,7 @@ before making changes.
 
 ---
 
-# 9. `hooks.py`
+## `hooks.py`
 
 `hooks.py` is one of the most important files in a Frappe application.
 
@@ -486,7 +475,7 @@ doc_events = {
 
 ---
 
-## 9.1 Hooks Rule
+### Hooks Rule
 
 Before adding a hook:
 

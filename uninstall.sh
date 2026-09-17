@@ -12,9 +12,10 @@
 #
 # This removes only the files/folders that install.sh creates:
 # AGENTS.md, FRAPPE_DEVELOPMENT.md, GIT_WORKFLOW.md, LICENSE, docs/,
-# workflow/, templates/. It never touches anything else in your project,
-# and it will not delete anything unless you confirm (or pass --yes).
-# README.md is left in place, since projects often customize it after install.
+# workflow/, templates/, .pre-commit-config.yaml. It never touches anything
+# else in your project, and it will not delete anything unless you confirm
+# (or pass --yes). README.md is left in place, since projects often
+# customize it after install.
 
 set -euo pipefail
 
@@ -22,7 +23,7 @@ TARGET_DIR="$(pwd)"
 ASSUME_YES=0
 
 print_help() {
-  sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 while [ $# -gt 0 ]; do
@@ -57,6 +58,7 @@ ITEMS=(
   "docs"
   "workflow"
   "templates"
+  ".pre-commit-config.yaml"
 )
 
 present=()

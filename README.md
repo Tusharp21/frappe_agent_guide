@@ -22,7 +22,10 @@ AI agents often generate generic code, miss framework-specific nuances, or overw
 * `templates/`: Markdown templates for documenting tasks.
   * `TASK_TEMPLATE.md`: Standard format for breaking down complex tasks.
 * `LICENSE`: MIT license for this template.
+* `.pre-commit-config.yaml`: Pre-commit hooks (ruff for Python lint/format, plus common whitespace/YAML/JSON checks) so the AI agent knows this project enforces linting before commit.
 * `install.sh` / `uninstall.sh`: One-line install/uninstall scripts (see [Installation](#installation) and [Uninstallation](#uninstallation)). Not copied into your project.
+* `CONTRIBUTING.md`: How to propose changes to this template itself.
+* `.github/PULL_REQUEST_TEMPLATE.md`: PR checklist used when contributing to this template.
 
 ## Installation
 
@@ -33,14 +36,16 @@ AI agents often generate generic code, miss framework-specific nuances, or overw
    curl -fsSL https://raw.githubusercontent.com/Tusharp21/frappe_agent_guide/master/install.sh | bash
    ```
 
-3. This downloads the template and copies `AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, and `templates/` straight into the current directory. It never touches unrelated files in your project.
+3. This downloads the template and copies `AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, `templates/`, and `.pre-commit-config.yaml` straight into the current directory. It never touches unrelated files in your project.
 4. By default it will **not** overwrite files that already exist at the destination:
    * Add `--force` to overwrite them: `curl -fsSL .../install.sh | bash -s -- --force`
    * Add `--dir <path>` to install somewhere other than the current directory: `curl -fsSL .../install.sh | bash -s -- --dir /path/to/project`
    * Add `--branch <name>` to install from a branch/tag other than `master`.
    * Run with `--help` to see all options: `curl -fsSL .../install.sh | bash -s -- --help`
 
-Prefer not to pipe a script from the internet into `bash`? Clone or download this repository and copy `AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, and `templates/` into your project root by hand.
+Prefer not to pipe a script from the internet into `bash`? Clone or download this repository and copy `AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, `templates/`, and `.pre-commit-config.yaml` into your project root by hand.
+
+Once installed, also run `pip install pre-commit && pre-commit install` inside your Frappe app so the hooks (ruff lint/format, plus common whitespace/YAML/JSON checks) actually run on commit.
 
 ## Uninstallation
 
@@ -51,7 +56,7 @@ Prefer not to pipe a script from the internet into `bash`? Clone or download thi
    curl -fsSL https://raw.githubusercontent.com/Tusharp21/frappe_agent_guide/master/uninstall.sh | bash
    ```
 
-3. It lists everything it's about to delete (`AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, `templates/`) and asks for confirmation before removing anything. `README.md` is left in place since projects often customize it after install.
+3. It lists everything it's about to delete (`AGENTS.md`, `FRAPPE_DEVELOPMENT.md`, `GIT_WORKFLOW.md`, `LICENSE`, `docs/`, `workflow/`, `templates/`, `.pre-commit-config.yaml`) and asks for confirmation before removing anything. `README.md` is left in place since projects often customize it after install.
 4. For non-interactive shells (CI, scripts), skip the prompt with `--yes`: `curl -fsSL .../uninstall.sh | bash -s -- --yes`
 5. Add `--dir <path>` to uninstall from a directory other than the current one.
 

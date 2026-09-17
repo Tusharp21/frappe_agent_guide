@@ -1,6 +1,6 @@
 # Git Workflow & Standards
 
-## 1. Overview
+## Overview
 
 This document defines the Git workflow and standards that must be followed by all developers and AI agents working on the repository.
 
@@ -16,7 +16,7 @@ The main goals are:
 
 ---
 
-# 2. GitHub Project Identity Check
+## GitHub Project Identity Check
 
 Before starting **any Git or GitHub operation**, the AI agent must determine whether the repository is a:
 
@@ -25,7 +25,7 @@ Before starting **any Git or GitHub operation**, the AI agent must determine whe
 
 The agent must **not assume** the project type.
 
-## 2.1 If Project Type Is Unknown
+### If Project Type Is Unknown
 
 The agent must stop and ask the user:
 
@@ -38,7 +38,7 @@ Before I start Git/GitHub operations, please confirm:
 
 No GitHub-related operation should begin until the project identity is confirmed.
 
-## 2.2 Personal Project
+### Personal Project
 
 For a personal project, configure the repository with the personal Git identity:
 
@@ -54,7 +54,7 @@ git config --local user.name
 git config --local user.email
 ```
 
-## 2.3 Office Project
+### Office Project
 
 For an office project, configure the repository with the office Git identity:
 
@@ -70,7 +70,7 @@ git config --local user.name
 git config --local user.email
 ```
 
-## 2.4 Mandatory Agent Rule
+### Mandatory Agent Rule
 
 The agent must follow this order:
 
@@ -99,7 +99,7 @@ If the project type is already explicitly known from the current project configu
 
 ---
 
-# 3. Branch Naming Convention
+## Branch Naming Convention
 
 All developers and AI agents must follow the standardized branch naming convention.
 
@@ -113,7 +113,7 @@ All developers and AI agents must follow the standardized branch naming conventi
 | Test        | `test/<module-name>`     | Adding or updating tests                   | `test/budget-tests`        |
 | Release     | `release/<version>`      | Release preparation                        | `release/v1.2.0`           |
 
-## Branch Naming Rules
+### Branch Naming Rules
 
 * Use lowercase names.
 * Use hyphens instead of spaces.
@@ -130,7 +130,7 @@ All developers and AI agents must follow the standardized branch naming conventi
 
 ---
 
-# 4. Commit Message Convention
+## Commit Message Convention
 
 All commits must follow the Conventional Commits format:
 
@@ -140,7 +140,7 @@ All commits must follow the Conventional Commits format:
 
 The description should clearly explain what the commit does.
 
-## 4.1 Supported Commit Types
+### Supported Commit Types
 
 | Type       | Purpose                                         | Example                                      |
 | ---------- | ----------------------------------------------- | -------------------------------------------- |
@@ -153,7 +153,7 @@ The description should clearly explain what the commit does.
 | `chore`    | Maintenance, dependencies, build/config updates | `chore: update frappe to v15.97.0`           |
 | `perf`     | Performance improvements                        | `perf: improve report performance`           |
 
-## 4.2 Commit Examples
+### Commit Examples
 
 Good:
 
@@ -181,7 +181,7 @@ testing
 
 ---
 
-# 5. AI Agent Git Safety Rules
+## AI Agent Git Safety Rules
 
 AI agents working in this repository must treat Git operations as controlled operations.
 
@@ -196,7 +196,7 @@ The agent must:
 
 ---
 
-# 6. Pre-Commit Inspection
+## Pre-Commit Inspection
 
 Before creating a commit, the AI agent must run:
 
@@ -234,9 +234,25 @@ git status
 git diff --cached
 ```
 
+### Pre-commit Hooks (Linting)
+
+This project uses the [pre-commit](https://pre-commit.com) framework, configured in `.pre-commit-config.yaml`. It runs `ruff` (Python lint + format) plus common whitespace/YAML/JSON checks automatically on `git commit`.
+
+The AI agent must:
+
+* Assume pre-commit hooks are active once `.pre-commit-config.yaml` exists in the repository.
+* Let `git commit` run the hooks normally, and fix whatever they flag (lint errors, formatting, trailing whitespace, etc.) rather than working around them.
+* Never run `git commit --no-verify` (or otherwise bypass hooks) unless the user explicitly authorizes it for that specific commit.
+* If a hook modifies files (e.g. `ruff-format` reformatting code), re-stage the changed files and re-attempt the commit — do not assume the first attempt succeeded.
+* If pre-commit itself is not installed yet, tell the user rather than silently skipping the checks:
+  ```bash
+  pip install pre-commit
+  pre-commit install
+  ```
+
 ---
 
-# 7. Sensitive Files & `.gitignore`
+## Sensitive Files & `.gitignore`
 
 Sensitive files must never be committed.
 
@@ -297,11 +313,11 @@ The `.gitignore` must be adapted to the actual project requirements.
 
 ---
 
-# 8. Mandatory "Stop & Ask" Rules
+## Mandatory "Stop & Ask" Rules
 
 The AI agent must immediately stop execution and ask the user for instructions when any of the following situations occurs.
 
-## 8.1 Merge Conflicts
+### Merge Conflicts
 
 If a `pull`, `merge`, or `rebase` produces conflicts:
 
@@ -334,7 +350,7 @@ or similar commands.
 
 ---
 
-# 9. Destructive Git Commands
+## Destructive Git Commands
 
 The following commands must never be executed without explicit user authorization:
 
@@ -365,7 +381,7 @@ I have stopped. Please explicitly confirm if you want this command executed.
 
 ---
 
-# 10. Authentication & Token Errors
+## Authentication & Token Errors
 
 If Git encounters authentication problems, the AI agent must stop.
 
@@ -405,7 +421,7 @@ PAT, SSH key, or repository permissions.
 
 ---
 
-# 11. Branch Switching With Uncommitted Changes
+## Branch Switching With Uncommitted Changes
 
 Before switching branches, check:
 
@@ -442,7 +458,7 @@ The agent must ask the user which option should be used.
 
 ---
 
-# 12. Main/Master Branch Protection
+## Main/Master Branch Protection
 
 The AI agent must never push directly to:
 
@@ -481,25 +497,25 @@ main/master
 
 ---
 
-# 13. Standard Development Workflow
+## Standard Development Workflow
 
 The recommended workflow is:
 
-## Step 1: Check Repository
+### Step 1: Check Repository
 
 ```bash
 git status
 git branch
 ```
 
-## Step 2: Verify Git Identity
+### Step 2: Verify Git Identity
 
 ```bash
 git config --local user.name
 git config --local user.email
 ```
 
-## Step 3: Create a Dedicated Branch
+### Step 3: Create a Dedicated Branch
 
 Example:
 
@@ -507,22 +523,22 @@ Example:
 git checkout -b feature/budget-module
 ```
 
-## Step 4: Make Changes
+### Step 4: Make Changes
 
 Implement and test the required changes.
 
-## Step 5: Inspect Changes
+### Step 5: Inspect Changes
 
 ```bash
 git status
 git diff
 ```
 
-## Step 6: Verify Sensitive Files
+### Step 6: Verify Sensitive Files
 
 Check that credentials, tokens, secrets, dumps, and private keys are not being committed.
 
-## Step 7: Stage Changes
+### Step 7: Stage Changes
 
 Prefer specific files:
 
@@ -531,13 +547,13 @@ git add path/to/file.py
 git add path/to/file.js
 ```
 
-## Step 8: Inspect Staged Changes
+### Step 8: Inspect Staged Changes
 
 ```bash
 git diff --cached
 ```
 
-## Step 9: Commit
+### Step 9: Commit
 
 Use a Conventional Commit:
 
@@ -545,19 +561,19 @@ Use a Conventional Commit:
 git commit -m "feat: add budget approval workflow"
 ```
 
-## Step 10: Push Dedicated Branch
+### Step 10: Push Dedicated Branch
 
 ```bash
 git push -u origin feature/budget-module
 ```
 
-## Step 11: Create Pull Request
+### Step 11: Create Pull Request
 
 Create a PR from the dedicated branch into the appropriate primary/development branch.
 
 ---
 
-# 14. AI Agent Quick Rules
+## AI Agent Quick Rules
 
 Before Git operations:
 
@@ -581,7 +597,7 @@ The AI agent must follow these rules:
 
 ---
 
-# 15. Final Git Safety Principle
+## Final Git Safety Principle
 
 When there is uncertainty, the AI agent must prefer:
 

@@ -1,10 +1,10 @@
-# Part 8 — Implementation Patterns & Examples (Sections 62-69)
+# Part 8 — Implementation Patterns & Examples
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 62. Preferred Implementation Pattern
+## Preferred Implementation Pattern
 
 For a typical business requirement:
 
@@ -38,7 +38,7 @@ For a typical business requirement:
 
 ---
 
-# 63. Example — Adding a Field
+## Example — Adding a Field
 
 Requirement:
 
@@ -66,7 +66,7 @@ directly.
 
 ---
 
-# 64. Example — Adding Client Behavior
+## Example — Adding Client Behavior
 
 Requirement:
 
@@ -90,7 +90,7 @@ Extend the existing implementation.
 
 ---
 
-# 65. Example — Adding Server Validation
+## Example — Adding Server Validation
 
 Requirement:
 
@@ -110,7 +110,7 @@ The UI may also show the error earlier, but server-side validation remains autho
 
 ---
 
-# 66. Example — Feature Toggle
+## Example — Feature Toggle
 
 Requirement:
 
@@ -136,7 +136,7 @@ Avoid hardcoding the flag.
 
 ---
 
-# 67. Example — API Integration
+## Example — API Integration
 
 Preferred:
 
@@ -162,7 +162,7 @@ Never expose credentials to the browser.
 
 ---
 
-# 68. Example — Data Migration
+## Example — Data Migration
 
 Requirement:
 
@@ -186,7 +186,7 @@ Do not put historical migration logic into normal document validation if it only
 
 ---
 
-# 69. Example — Deployable Configuration
+## Example — Deployable Configuration
 
 Requirement:
 

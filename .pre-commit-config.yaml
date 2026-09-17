@@ -1,0 +1,43 @@
+# Pre-commit hooks for this Frappe app.
+#
+# Setup (once per clone):
+#   pip install pre-commit
+#   pre-commit install
+#
+# Run manually against everything:
+#   pre-commit run --all-files
+#
+# AI agents: do not bypass these hooks with `git commit --no-verify` unless the
+# user explicitly authorizes it (see GIT_WORKFLOW.md). If a hook fails, fix the
+# underlying issue and re-stage rather than skipping the check.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.min\.(js|css)$'
+      - id: end-of-file-fixer
+        exclude: '\.min\.(js|css)$'
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: debug-statements
+
+  # Python lint + format (replaces black/isort/flake8/pyupgrade).
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        name: Lint Python (ruff)
+        args: ["--fix"]
+      - id: ruff-format
+        name: Format Python (ruff format)
+
+default_language_version:
+  python: python3

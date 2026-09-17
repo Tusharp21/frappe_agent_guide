@@ -1,7 +1,6 @@
 # Frappe Development Knowledge Base
 
 **Document:** `FRAPPE_DEVELOPMENT.md`
-**Version:** `1.1`
 **Purpose:** Project-level Frappe/ERPNext development standards and AI coding-agent instructions.
 
 This document is the **project development source of truth**. It is intended to be used by Frappe/ERPNext developers, technical leads, AI coding agents (Claude Code, Codex, Gemini Code Assist, etc.), and developers maintaining custom Frappe applications.
@@ -23,7 +22,7 @@ The full knowledge base is split into focused parts under [`docs/`](./docs/) so 
 | 7 | [`docs/07-ai-agent-guide.md`](./docs/07-ai-agent-guide.md) | Git rules, code review checklist, AI coding-agent workflow, file placement rules, agent do's and don'ts |
 | 8 | [`docs/08-examples-and-patterns.md`](./docs/08-examples-and-patterns.md) | Preferred implementation pattern and worked examples (field, client behavior, server validation, feature toggle, API integration, data migration, deployable configuration) |
 | 9 | [`docs/09-debugging-and-operations.md`](./docs/09-debugging-and-operations.md) | Debugging workflow, frontend/backend debugging, database transaction awareness, security rules, documentation rule, change management, deployment checklist |
-| 10 | [`docs/10-final-principles.md`](./docs/10-final-principles.md) | Minimal change principle, upgrade-friendly development, final AI agent checklist, project development golden rule, version history |
+| 10 | [`docs/10-final-principles.md`](./docs/10-final-principles.md) | Minimal change principle, upgrade-friendly development, final AI agent checklist, project development golden rule |
 
 ---
 
@@ -33,7 +32,3 @@ The full knowledge base is split into focused parts under [`docs/`](./docs/) so 
 * [`GIT_WORKFLOW.md`](./GIT_WORKFLOW.md) — Git branching, commit, and safety rules.
 * [`workflow/`](./workflow/) — step-by-step Requirement Analysis, Implementation, and Review process.
 * [`templates/`](./templates/) — Markdown templates for documenting tasks.
-
----
-
-# END OF FRAPPE DEVELOPMENT KNOWLEDGE BASE INDEX

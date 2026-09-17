@@ -1,10 +1,10 @@
-# Part 2 — Doctype & Script Development (Sections 10-21)
+# Part 2 — Doctype & Script Development
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 10. Document Events
+## Document Events
 
 Document events allow custom server-side logic to execute during a document lifecycle.
 
@@ -40,7 +40,7 @@ doc_events = {
 
 ---
 
-# 11. Server Script Convention
+## Server Script Convention
 
 This project follows a **Doctype + Event** approach for Server Scripts.
 
@@ -60,7 +60,7 @@ Avoid creating one large Server Script that contains unrelated logic for multipl
 
 ---
 
-## 11.1 Server Script Decision Rule
+### Server Script Decision Rule
 
 Use Server Script for:
 
@@ -82,7 +82,7 @@ Move logic into application Python code when it becomes:
 
 ---
 
-# 12. Client Script Convention
+## Client Script Convention
 
 This project follows a **one Client Script per Doctype** convention.
 
@@ -121,7 +121,7 @@ Helper functions may be defined in the same file when they belong specifically t
 
 ---
 
-## 12.1 Client Script Responsibilities
+### Client Script Responsibilities
 
 Client-side code can handle:
 
@@ -142,7 +142,7 @@ Important business validations must also be enforced server-side.
 
 ---
 
-# 13. Frontend Development Structure
+## Frontend Development Structure
 
 Frontend development should follow this hierarchy:
 
@@ -161,7 +161,7 @@ Avoid unrelated global JS unless the behavior is genuinely application-wide.
 
 ---
 
-# 14. Standard Doctype Customization
+## Standard Doctype Customization
 
 Standard ERPNext/Frappe DocTypes must not normally be modified directly.
 
@@ -199,24 +199,13 @@ my_app/
 
 ---
 
-# 15. `custom_script/`
+## `custom_script/`
 
-`custom_script/` is the project's preferred location for additional code related to standard DocTypes.
-
-Example:
-
-```text
-custom_script/
-└── purchase_order/
-    ├── purchase_order.js
-    └── purchase_order.py
-```
-
-The directory should be organized by Doctype.
+`custom_script/` is the project's preferred location for additional code related to standard DocTypes, organized by Doctype — see the example structure in "Standard Doctype Customization" above.
 
 ---
 
-## 15.1 Python File Responsibilities
+### Python File Responsibilities
 
 The Python file can contain:
 
@@ -236,7 +225,7 @@ def validate(doc, method=None):
 
 ---
 
-## 15.2 JavaScript File Responsibilities
+### JavaScript File Responsibilities
 
 The JS file can contain:
 
@@ -250,7 +239,7 @@ The JS file can contain:
 
 ---
 
-# 16. Custom Fields
+## Custom Fields
 
 Custom fields should be created through Frappe's customization mechanisms rather than by manually modifying standard DocType definitions.
 
@@ -272,7 +261,7 @@ Commit to Git
 
 ---
 
-# 17. Customization Export
+## Customization Export
 
 Exported customizations should be stored in the relevant application's module.
 
@@ -294,25 +283,9 @@ The exact generated files depend on what has been customized.
 
 ---
 
-## 17.1 Customization Rule
+### Customization Rule
 
-When a field is required on an existing/standard Doctype:
-
-**Preferred:**
-
-```text
-Custom Field
-    ↓
-Export
-    ↓
-custom/
-```
-
-**Avoid:**
-
-```text
-Directly editing ERPNext standard DocType JSON
-```
+When a field is required on an existing/standard Doctype, always go through the Custom Field → Export → `custom/` workflow described in "Custom Fields" and "Customization Export" above. Never edit the standard DocType's JSON directly.
 
 This makes the customization:
 
@@ -324,7 +297,7 @@ This makes the customization:
 
 ---
 
-# 18. DocTypes
+## DocTypes
 
 DocTypes are the core data/model abstraction in Frappe.
 
@@ -359,7 +332,7 @@ Not every Doctype requires every file.
 
 ---
 
-# 19. Doctype Python
+## Doctype Python
 
 The main Python controller can contain server-side document behavior.
 
@@ -384,7 +357,7 @@ Keep reusable logic in appropriate helper/service modules where necessary.
 
 ---
 
-# 20. Doctype JavaScript
+## Doctype JavaScript
 
 A Doctype JS file is responsible for client-side behavior specific to that DocType.
 
@@ -406,7 +379,7 @@ For a project convention, avoid unnecessarily creating multiple JS implementatio
 
 ---
 
-# 21. Child Tables
+## Child Tables
 
 Child tables should remain logically associated with their parent DocType.
 

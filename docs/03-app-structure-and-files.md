@@ -1,10 +1,10 @@
-# Part 3 — App Structure & Config Files (Sections 22-34)
+# Part 3 — App Structure & Config Files
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 22. Modules
+## Modules
 
 A Frappe application can contain multiple modules.
 
@@ -38,7 +38,7 @@ Use modules to keep related functionality grouped together.
 
 ---
 
-# 23. `modules.txt`
+## `modules.txt`
 
 `modules.txt` identifies modules belonging to an application.
 
@@ -56,7 +56,7 @@ Do not manually add arbitrary entries without understanding how the application/
 
 ---
 
-# 24. `public/`
+## `public/`
 
 The `public/` directory is generally used for static assets.
 
@@ -83,7 +83,7 @@ Avoid placing business logic in static assets.
 
 ---
 
-# 25. `templates/`
+## `templates/`
 
 The `templates/` directory contains reusable templates.
 
@@ -110,7 +110,7 @@ Complex business logic should remain in Python.
 
 ---
 
-# 26. `www/`
+## `www/`
 
 The `www/` directory is used for website routes/pages.
 
@@ -132,7 +132,7 @@ Use `www/` for website-facing pages, not normal Desk/Doctype functionality.
 
 ---
 
-# 27. Templates vs `www`
+## Templates vs `www`
 
 Use:
 
@@ -154,7 +154,7 @@ Do not create website pages in arbitrary locations.
 
 ---
 
-# 28. Fixtures
+## Fixtures
 
 Fixtures are used to export/import records or configuration that should be maintained as part of the application.
 
@@ -177,7 +177,7 @@ fixtures/
 
 ---
 
-## 28.1 Fixture Rule
+### Fixture Rule
 
 Use fixtures when a record is:
 
@@ -192,7 +192,7 @@ Avoid committing production-specific transactional records as fixtures.
 
 ---
 
-# 29. Patches
+## Patches
 
 Patches are used for controlled database/data migrations.
 
@@ -228,7 +228,7 @@ def execute():
 
 ---
 
-# 30. Patch Rules
+## Patch Rules
 
 A patch should be:
 
@@ -245,7 +245,7 @@ Use a patch when the purpose is to migrate existing data or schema-related state
 
 ---
 
-## 30.1 Patch Naming
+### Patch Naming
 
 Patch names should clearly describe the migration.
 
@@ -268,7 +268,7 @@ new.py
 
 ---
 
-# 31. `patches.txt`
+## `patches.txt`
 
 `patches.txt` controls the sequence of patches that are executed.
 
@@ -287,7 +287,7 @@ If a new correction is required, prefer creating a new patch.
 
 ---
 
-# 32. YAML Files
+## YAML Files
 
 YAML is commonly used for configuration and automation files.
 
@@ -319,7 +319,7 @@ Before modifying a YAML file, identify whether it is:
 
 ---
 
-# 33. TOML Files
+## TOML Files
 
 TOML is another configuration format commonly encountered in Python projects.
 
@@ -349,7 +349,7 @@ Do not modify `pyproject.toml` without checking the tools that consume its confi
 
 ---
 
-# 34. JSON Files
+## JSON Files
 
 Frappe uses JSON extensively for metadata/configuration.
 

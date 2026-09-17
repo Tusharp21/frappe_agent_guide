@@ -1,10 +1,10 @@
-# Part 5 — Business Logic, Jobs & Reports (Sections 46-50)
+# Part 5 — Business Logic, Jobs & Reports
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 46. Business Logic Placement
+## Business Logic Placement
 
 Use the following general decision framework.
 
@@ -93,7 +93,7 @@ Settings
 
 ---
 
-# 47. Scheduled Jobs
+## Scheduled Jobs
 
 Scheduled/background processing should be configured through appropriate Frappe mechanisms.
 
@@ -113,7 +113,7 @@ For long-running operations, consider background jobs.
 
 ---
 
-# 48. Background Jobs
+## Background Jobs
 
 Example:
 
@@ -137,7 +137,7 @@ Ensure that jobs are safe to retry where possible.
 
 ---
 
-# 49. Reports
+## Reports
 
 Reports should follow the same module/domain organization.
 
@@ -165,7 +165,7 @@ Where appropriate, centralize reusable business calculations.
 
 ---
 
-# 50. Print Formats
+## Print Formats
 
 Print formats should be treated as presentation logic.
 

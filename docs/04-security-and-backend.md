@@ -1,10 +1,10 @@
-# Part 4 — Settings, Security & Backend Practices (Sections 35-45)
+# Part 4 — Settings, Security & Backend Practices
 
 _Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
 
 ---
 
-# 35. Settings Architecture
+## Settings Architecture
 
 The project follows a **central Settings pattern**.
 
@@ -34,7 +34,7 @@ My Application Settings
 
 ---
 
-# 36. Feature Flags
+## Feature Flags
 
 If a feature needs to be enabled/disabled by an administrator, use a Settings field.
 
@@ -69,7 +69,7 @@ when the business expects the administrator to control the feature.
 
 ---
 
-# 37. Passwords and Secrets
+## Passwords and Secrets
 
 Password/API-secret related configuration should be managed through the designated Settings mechanism.
 
@@ -96,7 +96,7 @@ Secrets must remain server-side.
 
 ---
 
-# 38. Logging
+## Logging
 
 Application errors that require persistent investigation should be recorded through Frappe's Error Log mechanisms.
 
@@ -122,7 +122,7 @@ Payment Gateway Error
 
 ---
 
-# 39. Logging Rules
+## Logging Rules
 
 Logs should provide useful debugging context.
 
@@ -161,7 +161,7 @@ frappe.log_error(
 
 ---
 
-# 40. Error Handling
+## Error Handling
 
 Do not silently ignore exceptions.
 
@@ -193,7 +193,7 @@ Do not hide failures merely to make the transaction appear successful.
 
 ---
 
-# 41. API and Integration Development
+## API and Integration Development
 
 External API integrations must remain server-side unless there is a clear reason otherwise.
 
@@ -225,7 +225,7 @@ because credentials can be exposed to the client.
 
 ---
 
-# 42. Whitelisted Methods
+## Whitelisted Methods
 
 Use whitelisted methods when frontend/client code needs to call server-side functionality.
 
@@ -254,7 +254,7 @@ Never assume that hiding a button on the frontend provides security.
 
 ---
 
-# 43. Permissions
+## Permissions
 
 Permissions must be enforced server-side.
 
@@ -275,7 +275,7 @@ For sensitive operations:
 
 ---
 
-# 44. Database Access
+## Database Access
 
 Prefer Frappe APIs when appropriate.
 
@@ -307,7 +307,7 @@ When using SQL:
 
 ---
 
-# 45. Performance
+## Performance
 
 Avoid unnecessary database queries.
 

@@ -13,9 +13,10 @@
 #
 # The script downloads a tarball of the repository and copies only the
 # template files (AGENTS.md, FRAPPE_DEVELOPMENT.md, docs/, GIT_WORKFLOW.md,
-# workflow/, templates/, LICENSE) into the target directory. It never
-# touches unrelated files in your project, and by default it will not
-# overwrite anything that already exists at the destination.
+# workflow/, templates/, LICENSE, .pre-commit-config.yaml) into the target
+# directory. It never touches unrelated files in your project, and by
+# default it will not overwrite anything that already exists at the
+# destination.
 
 set -euo pipefail
 
@@ -26,7 +27,7 @@ TARGET_DIR="$(pwd)"
 FORCE=0
 
 print_help() {
-  sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 while [ $# -gt 0 ]; do
@@ -93,6 +94,7 @@ ITEMS=(
   "docs"
   "workflow"
   "templates"
+  ".pre-commit-config.yaml"
 )
 
 copied=()

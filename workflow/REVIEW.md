@@ -25,3 +25,4 @@ After implementation is complete, the AI must self-review the code against this 
 - [ ] Are all `print()`, `console.log()`, and temporary debug statements removed?
 - [ ] Is error handling robust and user-friendly?
 - [ ] (If applicable) Is the Git diff clean and logical?
+- [ ] Do the pre-commit hooks (`ruff`, etc.) pass? Run `pre-commit run --all-files` if unsure.
