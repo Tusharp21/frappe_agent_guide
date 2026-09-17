@@ -1,0 +1,30 @@
+# This list mirrors the "Sensitive Files & .gitignore" section of GIT_WORKFLOW.md.
+# Adapt it further to the actual project this template is copied into.
+
+# Environment files
+.env
+.env.*
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.crt
+*.secret
+secrets.json
+credentials.json
+
+# Database dumps
+*.sql
+*.sql.gz
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Local files
+*.log
+.DS_Store

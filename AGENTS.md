@@ -32,5 +32,5 @@ Whenever a new task or query is assigned, the AI must follow this flow:
 
 ## 6. Git Execution Rules
 * Strictly follow conventions in `GIT_WORKFLOW.md`.
-* Never push directly to main/master branch without authorization.
+* Never push directly to the main/master branch, under any circumstances — always work on a dedicated branch and submit a Pull Request (see `GIT_WORKFLOW.md`).
 * Halt operation immediately on git conflicts or authentication issues and prompt the user.
