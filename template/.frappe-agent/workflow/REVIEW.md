@@ -42,10 +42,8 @@ For MEDIUM and HIGH, review the final `git diff` with a separate read-only revie
 
 ## 7. Final Report and Record
 
-Evidence matters more than the word "done". Never write that tests passed unless you ran them and have the output.
+What the summary and audit evidence must contain (the sections are in the task record, see `TASK.md` step 9). Evidence matters more than the word "done".
 
-* Fill the Testing report, Final summary and Audit evidence sections of the task record (HIGH also the Rollback plan): what was done, files changed (`git diff --stat`), **actual** test output (or "NOT RUN" and why), review findings, problems, limitations, risk, branch, commit ID, each acceptance criterion marked met / not met / not verified, and the rollback plan for HIGH tasks.
-* LOW tasks without a record: give the user a short report: what changed, files changed, commands run, test results, risks, branch and commit.
+* What was done, files changed (`git diff --stat`), **actual** test output (or "NOT RUN" and why), review findings, problems, limitations, risk, branch, commit ID, each acceptance criterion marked met / not met / not verified, and the rollback plan for HIGH tasks.
 * Do not mark the work done while any acceptance criterion is unverified without saying so.
-* If the change must reach production, write a deployment plan (see `DEPLOYMENT.md`) and hand it to the user. Do not deploy.
-* Update the card, `project_knowledge/` and any lessons (step 11 of `TASK.md`).
+* LOW tasks without a record: give the user a short report with what changed, files changed, commands run, test results, risks, branch and commit.

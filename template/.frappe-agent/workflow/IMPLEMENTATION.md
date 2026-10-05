@@ -1,11 +1,11 @@
 # Implementation Workflow
 
-Step 6 of the [`TASK.md`](./TASK.md) workflow. This phase begins ONLY after the solution is **LOCKED** (or the user chose automatic mode at the start for a risk level that allows it).
+The checklist for step 6 of the [`TASK.md`](./TASK.md) workflow. Begin only after the solution is **LOCKED** (or the user chose automatic mode where it is allowed).
 
-## 1. Verify the Lock and the Scope
+## 1. Verify the Scope
 * Re-read the locked solution and the acceptance criteria in the task record.
-* Ensure absolutely no changes are made outside the agreed scope and files. No unrelated refactors, no new dependencies without approval.
-* If something forces a material change to the locked solution, **stop**. Move the task back to `DRAFT`, explain, and get a new decision. Never deviate silently.
+* Make no changes outside the agreed scope and files: no unrelated refactors, no new dependencies without approval.
+* If the solution must change materially, stop and follow `TASK.md` step 5.
 
 ## 2. Code Implementation
 * **Backend:** Write Python logic, updating controllers or hooks. Ensure clear separation of concerns.

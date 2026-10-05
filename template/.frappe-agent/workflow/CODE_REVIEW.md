@@ -8,6 +8,6 @@ SCOPE -> DIFF -> REVIEW -> FINDINGS -> (user decides) -> fixes as a normal task
 
 1. **Scope.** Confirm what is being reviewed (`git diff <base>...<branch>` or the PR) and the task or requirement it should satisfy. Read the related task record if there is one.
 2. **Diff.** Read the whole diff, not just the summary. Note files changed that the requirement does not explain.
-3. **Review for:** functional bugs, edge cases, security issues (permission checks, exposed methods, secrets), performance problems (queries in loops, N+1), architecture or project-rule violations, regression risk, missing tests, unnecessary changes, and upgrade impact of customizations.
+3. **Review** against the checklist in [`REVIEW.md`](./REVIEW.md) sections 1 to 4, and also check edge cases, regression risk, missing tests, unnecessary changes, architecture or project-rule violations, and upgrade impact of customizations.
 4. **Findings.** For each finding give: severity (High / Medium / Low), file and line, the problem, why it matters, and the recommended fix. If you find no issue, say so explicitly.
 5. **Next.** Do not apply fixes yourself. The user chooses which findings to fix; the fixes then follow the normal [`TASK.md`](./TASK.md) workflow.

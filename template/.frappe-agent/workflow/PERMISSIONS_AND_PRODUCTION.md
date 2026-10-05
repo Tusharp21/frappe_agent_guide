@@ -18,15 +18,9 @@ Approval for one action does not extend to the next. Choosing automatic mode at 
 
 The agent never executes anything against production. Not even harmless-looking read commands: no `bench --site <prod> ...`, no SSH/SCP/rsync/`docker exec` to a production host, no database client against production, no production credentials in its environment.
 
-What the agent does instead:
-
-1. Write a deployment plan with [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) (see [`DEPLOYMENT.md`](./DEPLOYMENT.md)): changes, migrations, dependencies, config changes, risk, backup requirement, validation steps, rollback steps, post-deployment checks, and the human approvals required.
-2. Hand the plan to the user. The user runs every step.
-3. If the plan needs information from production, ask the user to run a command and paste the output (after removing secrets).
+Instead it writes a deployment plan and hands it to the user, who runs every step (see [`DEPLOYMENT.md`](./DEPLOYMENT.md)). If it needs information from production, it asks the user to run a command and paste the output, with secrets removed.
 
 How production is identified: the sites and hosts in `environments.production` in `config.json`, plus any `--site` or SSH target that contains `prod`, `production` or `live` as a word. If it is unclear whether a target is production, treat it as production and ask.
-
-Expected path for a change: development, then a test/staging site, then human QA, then production with human approval. A rollback plan is mandatory for anything that reaches production.
 
 ## Secrets
 

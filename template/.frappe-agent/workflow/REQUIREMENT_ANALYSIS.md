@@ -1,6 +1,6 @@
 # Understanding and Proposal Checklist
 
-Steps 2 to 4 of the [`TASK.md`](./TASK.md) workflow: understand the request, inspect the system, and propose a solution. Do not write code in this phase. Risk levels, the plan-or-auto question, and the output formats are defined in `TASK.md`.
+The checklist for steps 2 and 3 of [`TASK.md`](./TASK.md): understand the request and inspect the system. Do not write code in this phase. The flow, risk levels and the plan-or-auto question are in `TASK.md`.
 
 ## 1. Understand the Request
 * What is the exact business requirement and the expected result?
@@ -24,7 +24,4 @@ Steps 2 to 4 of the [`TASK.md`](./TASK.md) workflow: understand the request, ins
 * **Performance:** will this involve large datasets? Do we need background jobs?
 * **Migration:** does it change the schema or existing data? If yes, the task is HIGH.
 
-## 5. Propose
-Fill the Solution proposal section of the task record, with acceptance criteria for MEDIUM and HIGH, and a rollback plan and migration-impact note for HIGH.
-
-**STOP HERE.** Present the proposal and wait for the user's decision. Do not continue until the solution is locked (or the user chose automatic mode where it is allowed).
+Then go to step 4 (Propose) of `TASK.md` and stop for the user's decision.

@@ -51,10 +51,10 @@ Records are created for the risk levels in `history.record_for`. Fill the matchi
 3. **Clarify.** If anything important is ambiguous, do not code and do not guess a business decision: ask short, specific questions, one at a time, each with why it matters and options. Record each answer in the user's words. (Section: Clarification.)
 4. **Propose.** Give the solution with acceptance criteria; HIGH adds a rollback plan and migration-impact note. Give a recommendation, not just options. (Section: Solution proposal.)
 5. **Decide and lock.** Record the user's decision, then `../scripts/task_state.sh <id> LOCKED --note "<what the user said>"`. Never lock on your own. **A locked solution is never changed silently**: if it must change materially, stop, move back to `DRAFT`, explain, and get a new decision. (Section: Decision and lock.)
-6. **Execute.** `IN_PROGRESS`; follow [`IMPLEMENTATION.md`](./IMPLEMENTATION.md): stay inside the locked solution and scope, no unrelated refactors, no new dependencies without approval. (Section: Execution log.)
-7. **Test and verify.** If the decision was YES run the real checks in [`REVIEW.md`](./REVIEW.md); if NO record the reason and still lint. Report real results; "tests should pass" is not evidence. (Section: Testing report.)
-8. **Review.** Review the diff; for MEDIUM and HIGH use a separate read-only reviewer (for example a subagent). Fix findings and re-run the checks. (Section: Review.)
-9. **Summary and audit.** Fill what was done, files (`git diff --stat`), real test output, problems, limitations, risk, branch, commit, and each acceptance criterion met / not met / not verified (HIGH also the rollback plan). (Sections: Final summary, Audit evidence, Rollback plan.)
+6. **Execute.** `IN_PROGRESS`; follow [`IMPLEMENTATION.md`](./IMPLEMENTATION.md). (Section: Execution log.)
+7. **Test and verify.** Run the checks in [`REVIEW.md`](./REVIEW.md) section 6 and report real results; "tests should pass" is not evidence. (Section: Testing report.)
+8. **Review.** Review the diff and fix findings, as in [`REVIEW.md`](./REVIEW.md). (Section: Review.)
+9. **Summary and audit.** Fill the summary and audit evidence as described in [`REVIEW.md`](./REVIEW.md) section 7. (Sections: Final summary, Audit evidence, Rollback plan.)
 10. **Approval.** `WAITING_FOR_APPROVAL`; present the summary. Only on the user's approval run `../scripts/task_state.sh <id> COMPLETED --note "<what the user said>"`. Changes requested: back to `IN_PROGRESS` (or `DRAFT` if the solution changes).
 11. **Update history.** Update the card at the top of the record (decision, locked solution, files, tests, approval, commit). Add lasting facts to `../project_knowledge/APP_MAP.md` and decisions to `DECISIONS.md`. If a mistake repeated, propose a rule, test or checklist item. (Section: Lessons.)
 
@@ -62,11 +62,10 @@ You never deploy. If the change must reach production, write the plan per [`DEPL
 
 ## Non-negotiable rules
 
+These come with the hard rules in `AGENTS.md` (production read-only, real test results only, stay in scope).
+
 1. Never guess an ambiguous business requirement; ask.
 2. Never change a locked solution silently.
-3. Never modify production; never run destructive actions without explicit approval.
-4. Never claim tests passed unless you ran them and have the output.
-5. Avoid unrelated changes.
-6. On every new task, search the relevant history first.
-7. Record important work.
-8. The human keeps the final responsibility.
+3. On every new task, search the relevant history first.
+4. Record important work.
+5. The human keeps the final responsibility.
