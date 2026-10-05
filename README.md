@@ -160,4 +160,3 @@ It lists what it will remove and asks for confirmation (`--yes` to skip, `--keep
 * `template/` — the installable payload (`AGENTS.md` and `.frappe-agent/`)
 * `install.sh`, `uninstall.sh` — installer scripts
 * `CONTRIBUTING.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `LICENSE`
-* `AGENTS.md` — short notes for AI agents working on this repository itself
