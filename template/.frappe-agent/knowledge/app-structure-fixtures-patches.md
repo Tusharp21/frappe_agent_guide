@@ -4,6 +4,22 @@ _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 
+## File Placement (Quick Reference)
+
+| What | Where |
+| ---- | ----- |
+| Custom code for a standard DocType | `custom_script/<doctype_name>/<doctype_name>.js` and `.py` |
+| A new custom DocType | `<module>/doctype/<doctype_name>/` with `<doctype_name>.json`, `.py`, `.js` and `test_<doctype_name>.py` |
+| Exported customizations (custom fields, property setters) | `<module>/custom/` |
+| Patches | `patches/<version>/` (registered in `patches.txt`) |
+| Static frontend assets | `public/` |
+| Website pages | `www/` |
+| Reusable templates | `templates/` |
+
+The sections below explain each of these.
+
+---
+
 ## Modules
 
 A Frappe application can contain multiple modules.

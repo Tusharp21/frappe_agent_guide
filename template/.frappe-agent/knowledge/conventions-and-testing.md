@@ -130,3 +130,49 @@ When changing existing fields or data:
 Never assume that adding a field automatically solves historical data requirements.
 
 ---
+
+## Documentation Rule
+
+New complex functionality should be documented.
+
+Documentation should explain:
+
+```text
+Purpose
+Architecture
+Doctype involved
+Settings involved
+Hooks
+Server logic
+Client logic
+External integrations
+Migration requirements
+Known limitations
+```
+
+Do not document obvious code line-by-line unless necessary.
+
+Document the **why**, not only the **what**.
+
+---
+
+## Change Management
+
+For every significant feature, identify whether the change includes:
+
+```text
+Code
+Metadata
+Configuration
+Database
+Fixtures
+Patches
+Hooks
+Permissions
+Frontend assets
+External integration
+```
+
+A feature is not considered complete until all required components are handled.
+
+The deployment checklist and the deployment plan are in [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) (see `../workflow/DEPLOYMENT.md`).

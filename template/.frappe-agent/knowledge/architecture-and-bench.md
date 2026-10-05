@@ -20,6 +20,10 @@ The primary principle is:
 
 Always prefer standard Frappe/ERPNext functionality and supported customization mechanisms over new code, and never modify standard Frappe/ERPNext source directly (see "Do Not Modify Standard Frappe/ERPNext Code Directly" below). For the full decision framework on which extension point (Client Script, Server Script, Python, hooks.py, Patch, Fixture, or Settings) to use for a given requirement, see ["Business Logic Placement"](./business-logic-and-jobs.md).
 
+> **The golden rule: before creating new Frappe code, first understand where the existing functionality belongs and extend the existing architecture instead of creating a parallel implementation.**
+
+The project should stay Doctype-centric, configuration-driven, server-validated, upgrade-friendly, version-controlled and easy to debug.
+
 ---
 
 ## Golden Rules
@@ -72,6 +76,8 @@ Examples:
 - Fixtures
 - Patches
 
+Framework upgrades matter when designing customizations: prefer these mechanisms in a custom app because direct modification of ERPNext/Frappe source increases upgrade and merge complexity.
+
 ---
 
 ### Configuration Must Not Be Hardcoded
@@ -105,6 +111,25 @@ Sales Order
     -> Sales Order Server Scripts
     -> Sales Order customizations
 ```
+
+---
+
+### Make the Smallest Correct Change
+
+Make the smallest correct change that follows the existing architecture.
+
+```text
+Avoid:   small requirement -> large refactor -> unrelated file changes
+Prefer:  requirement -> existing extension point -> minimal implementation -> test
+```
+
+Do refactoring separately when possible.
+
+---
+
+### Do Not Delete Logic Without Checking Its Consumers
+
+Before deleting or replacing existing logic (a function, hook, script, field or patch), search for everything that uses it: code, scripts, hooks, reports, print formats, fixtures. If you cannot show that nothing depends on it, keep it.
 
 ---
 
