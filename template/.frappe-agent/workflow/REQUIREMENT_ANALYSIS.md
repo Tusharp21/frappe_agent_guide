@@ -25,6 +25,6 @@ Steps 2 to 4 of the [`TASK.md`](./TASK.md) workflow: understand the request, ins
 * **Migration:** does it change the schema or existing data? If yes, the task is HIGH.
 
 ## 5. Propose
-Give the proposal in the format in `TASK.md` step 4, with acceptance criteria for MEDIUM and HIGH, and a rollback plan and migration-impact note for HIGH.
+Add the `proposal` section with `../scripts/task_section.sh <id> proposal` and fill it in, with acceptance criteria for MEDIUM and HIGH, and a rollback plan and migration-impact note for HIGH.
 
 **STOP HERE.** Present the proposal and wait for the user's decision. Do not continue until the solution is locked (or the user chose automatic mode where it is allowed).

@@ -1,6 +1,6 @@
 # Permissions, Production and Secrets
 
-Every action the agent can perform has a policy: allowed automatically, needs approval, or prohibited. The thresholds below are the defaults; the patterns that hooks enforce are in [`../config.json`](../config.json) (see [`../CONFIGURATION.md`](../CONFIGURATION.md)).
+Every action the agent can perform has a policy: allowed automatically, needs approval, or prohibited. The thresholds below are the defaults; the patterns that hooks enforce are in [`../policy.json`](../policy.json) and the production sites in [`../config.json`](../config.json) (humans: see [`../CONFIGURATION.md`](../CONFIGURATION.md)).
 
 ## Action levels
 
@@ -30,7 +30,7 @@ Expected path for a change: development, then a test/staging site, then human QA
 
 ## Secrets
 
-* Never read, print, copy or edit `.env`, `site_config.json`, `common_site_config.json`, private keys or certificates (the `protected_files` list in `config.json`). `site_config.json` contains database passwords.
+* Never read, print, copy or edit `.env`, `site_config.json`, `common_site_config.json`, private keys or certificates (the `protected_files` list in `policy.json`). `site_config.json` contains database passwords.
 * Never ask the user to paste a secret into the conversation. If a task needs a credential, tell the user which setting to configure and let them do it.
 * Never write secrets into code, commands, logs, plans or reports. Reference them by name (for example "the `api_secret` field in the Settings DocType").
 * Template files such as `.env.example` are fine to read.

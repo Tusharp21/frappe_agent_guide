@@ -1,6 +1,13 @@
 # Configuration Guide
 
-Everything configurable lives in [`config.json`](./config.json) in this folder. The agent reads it before each task, and the enforcement hooks read it on every tool call. It is preserved when you update the template (`install.sh --update`). Edit it directly; there is no other settings file.
+> For humans. Agents do not need to read this file.
+
+Settings live in two small files in this folder, both preserved when you update the template (`install.sh --update`); edit them directly:
+
+* [`config.json`](./config.json): the workflow settings the agent reads at the start of each task (approval mode, risk levels, history, production sites). Keep it small.
+* [`policy.json`](./policy.json): the command and file patterns the enforcement hooks apply on every tool call (protected files, blocked and ask-first commands, the command log). The agent does not need to read it.
+
+A key in `config.json` overrides the same key in `policy.json`, so installs made before the split keep working.
 
 ## First-time setup in a project
 
@@ -20,14 +27,14 @@ Everything configurable lives in [`config.json`](./config.json) in this folder. 
 | `history.enabled` | `true` / `false` | Turn task records on or off. |
 | `history.path` | folder path | Where task records live. Default `tasks` (inside `.frappe-agent/`). Relative paths are resolved from `.frappe-agent/`; an absolute path (for example a shared folder or a checkout of a private repo) works too. |
 | `history.record_for` | list of risk levels | Tasks of these levels get a `TASK-YYYY-NNN.md` record. Default `medium` and `high`; LOW tasks get a short summary only. |
-| `audit.enabled` | `true` / `false` | Turn the command log on or off. |
-| `audit.log_commands` | `true` / `false` | Claude Code, Cursor and Copilot hooks append each shell command to `audit/commands.log` (secrets masked). |
+| `audit.enabled` (`policy.json`) | `true` / `false` | Turn the command log on or off. |
+| `audit.log_commands` (`policy.json`) | `true` / `false` | Claude Code, Cursor and Copilot hooks append each shell command to `audit/commands.log` (secrets masked). |
 | `environments.production.sites` | list of site names | Exact production site names. The agent is read-only there. |
 | `environments.production.hosts` | list of hostnames or IPs | Production servers. Any command mentioning them is blocked. |
 | `environments.production.name_words` | list of words | A `--site` or SSH target containing one of these as a word (`prod`, `production`, `live`) is treated as production. |
-| `protected_files` | list of file-name globs | Files the agent may not read or edit (secrets). `*.example`, `*.sample` and `*.template` variants are allowed. |
-| `blocked_commands` | list of regular expressions | Prohibited actions, blocked outright. |
-| `ask_commands` | list of regular expressions | Ask-first actions; the agent's tool asks you first. |
+| `protected_files` (`policy.json`) | list of file-name globs | Files the agent may not read or edit (secrets). `*.example`, `*.sample` and `*.template` variants are allowed. |
+| `blocked_commands` (`policy.json`) | list of regular expressions | Prohibited actions, blocked outright. |
+| `ask_commands` (`policy.json`) | list of regular expressions | Ask-first actions; the agent's tool asks you first. |
 
 Patterns are case-insensitive regular expressions written as JSON strings, so backslashes are doubled (`\\b`). To loosen a rule, remove its entry; to add one, append a pattern.
 
@@ -42,7 +49,7 @@ Patterns are case-insensitive regular expressions written as JSON strings, so ba
 | Task records (history and audit in one file per task) | `tasks/TASK-YYYY-NNN.md`, or `history.path` | No (`tasks/` is ignored and kept on update) |
 | Command log | `audit/commands.log` | No |
 | Project facts and decisions | `project_knowledge/` | Your choice; kept on update |
-| Settings | `config.json` | Your choice; kept on update |
+| Settings | `config.json`, `policy.json` | Your choice; kept on update |
 
 The bench root is normally not a Git repository, so all of this stays local to the machine. To share history with your team, point `history.path` at a shared folder or at a checkout of a private repository that your team commits to, and keep it out of the app repositories.
 

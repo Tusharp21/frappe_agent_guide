@@ -2,7 +2,7 @@
 #
 # Claude Code PostToolUse hook (matcher: Bash). Appends each executed command
 # to .frappe-agent/audit/commands.log (local, git-ignored) when
-# config.json has audit.log_commands = true. Obvious secrets in the command
+# audit.log_commands is true (policy.json or config.json). Obvious secrets in the command
 # line are masked. Never blocks anything.
 
 command -v python3 >/dev/null 2>&1 || exit 0
@@ -15,9 +15,14 @@ import datetime, json, os, re, sys
 try:
     data = json.loads(os.environ.get("HOOK_INPUT", ""))
     base = os.environ["FA_DIR"]
-    cfg = json.load(open(os.path.join(base, "config.json")))
 except Exception:
     sys.exit(0)
+cfg = {}
+for name in ("policy.json", "config.json"):  # config.json wins
+    try:
+        cfg.update(json.load(open(os.path.join(base, name))))
+    except Exception:
+        pass
 
 audit = cfg.get("audit") or {}
 if not (audit.get("enabled") and audit.get("log_commands")):

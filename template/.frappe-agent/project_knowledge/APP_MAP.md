@@ -18,6 +18,7 @@ Add one section per app under `apps/`.
 
 * Purpose:
 * Repository / main branch:
+* Git project type (Personal / Office) and the local git identity to use:
 * Key modules:
 * Key DocTypes:
 * Settings DocType / feature flags:

@@ -44,7 +44,7 @@ For MEDIUM and HIGH, review the final `git diff` with a separate read-only revie
 
 Evidence matters more than the word "done". Never write that tests passed unless you ran them and have the output.
 
-* Fill the final summary and audit evidence in the task record (`../templates/TASK_RECORD.md`): what was done, files changed (`git diff --stat`), **actual** test output (or "NOT RUN" and why), review findings, problems, limitations, risk, branch, commit ID, each acceptance criterion marked met / not met / not verified, and the rollback plan for HIGH tasks.
+* Add the `testing`, `summary` and `audit` sections (HIGH also `rollback`) with `../scripts/task_section.sh <id> <name>` and fill them in: what was done, files changed (`git diff --stat`), **actual** test output (or "NOT RUN" and why), review findings, problems, limitations, risk, branch, commit ID, each acceptance criterion marked met / not met / not verified, and the rollback plan for HIGH tasks.
 * LOW tasks without a record: give the user a short report: what changed, files changed, commands run, test results, risks, branch and commit.
 * Do not mark the work done while any acceptance criterion is unverified without saying so.
 * If the change must reach production, write a deployment plan (see `DEPLOYMENT.md`) and hand it to the user. Do not deploy.

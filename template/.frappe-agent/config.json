@@ -16,10 +16,6 @@
       "high"
     ]
   },
-  "audit": {
-    "enabled": true,
-    "log_commands": true
-  },
   "environments": {
     "production": {
       "sites": [],
@@ -30,35 +26,5 @@
         "live"
       ]
     }
-  },
-  "protected_files": [
-    ".env",
-    ".env.*",
-    "site_config.json",
-    "common_site_config.json",
-    "*.pem",
-    "*.key",
-    "*.p12",
-    "*.pfx",
-    "id_rsa",
-    "id_ed25519"
-  ],
-  "blocked_commands": [
-    "\\bDROP\\s+(TABLE|DATABASE|SCHEMA)\\b",
-    "\\bTRUNCATE\\b",
-    "\\bDELETE\\s+FROM\\s+[`\\w.]+\\s*(;|\"|'|$)",
-    "\\bbench\\b.*\\b(drop-site|reinstall|uninstall-app|remove-app)\\b",
-    "\\brm\\s+-[a-zA-Z]*(rf|fr)[a-zA-Z]*\\s+(/|~|\\$HOME|\\.\\.?)(\\s|$|/\\*)",
-    "\\b(ufw|iptables|nft|nsupdate)\\b",
-    "\\bchmod\\s+-R\\s+777\\b"
-  ],
-  "ask_commands": [
-    "\\b(pip3?|npm|yarn|pnpm)\\s+(install|add|uninstall)\\b",
-    "\\bbench\\b.*\\b(get-app|new-app|install-app|update|migrate|restore|execute|console|set-config|build|backup|remove-from-installed-apps)\\b",
-    "\\brm\\s",
-    "\\b(curl|wget)\\b",
-    "\\bgit\\s+push\\b",
-    "\\bsudo\\b",
-    "\\b(systemctl|supervisorctl)\\b"
-  ]
+  }
 }

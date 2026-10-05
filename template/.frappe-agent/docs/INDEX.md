@@ -1,6 +1,6 @@
 # Docs Routing Index
 
-Do **not** read every file in `docs/`. Pick the row that matches the task, read only that part, and follow its links when it points elsewhere. The full table of contents is in [`FRAPPE_DEVELOPMENT.md`](../FRAPPE_DEVELOPMENT.md).
+Do **not** read every file in `docs/`. Pick the row that matches the task, then run `../scripts/doc_sections.sh <NN>` (for example `02`) to list that doc's headings with line ranges and read only the section you need. Follow its links when it points elsewhere. The full table of contents is in [`FRAPPE_DEVELOPMENT.md`](../FRAPPE_DEVELOPMENT.md).
 
 | If the task involves... | Read |
 | ----------------------- | ---- |

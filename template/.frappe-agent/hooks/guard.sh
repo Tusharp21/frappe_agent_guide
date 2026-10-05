@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Claude Code PreToolUse hook. Enforces .frappe-agent/config.json and the rules
+# Claude Code PreToolUse hook. Enforces .frappe-agent/policy.json, config.json and the rules
 # in GIT_WORKFLOW.md and workflow/PERMISSIONS_AND_PRODUCTION.md:
 #   * blocks forbidden git commands (push to main/master, force-push,
 #     --no-verify, reset --hard, clean, branch -D, --ours/--theirs)
@@ -20,7 +20,7 @@ command -v python3 >/dev/null 2>&1 || exit 0
 # The script comes from the heredoc, so hand the hook's JSON input and the
 # config path over via the environment instead of stdin.
 HOOK_INPUT="$(cat)" \
-FA_CONFIG="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/config.json" \
+FA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)" \
 python3 - <<'PY'
 import fnmatch, json, os, re, shlex, subprocess, sys
 
@@ -29,10 +29,14 @@ try:
 except Exception:
     sys.exit(0)
 
-try:
-    cfg = json.load(open(os.environ["FA_CONFIG"]))
-except Exception:
-    cfg = {}
+# policy.json holds the patterns; config.json holds the workflow settings and
+# may also override any key (older installs kept the patterns in config.json).
+cfg = {}
+for name in ("policy.json", "config.json"):
+    try:
+        cfg.update(json.load(open(os.path.join(os.environ["FA_DIR"], name))))
+    except Exception:
+        pass
 
 # Normalize the payloads of Claude Code / VS Code, Cursor and Copilot hooks.
 dialect = "claude"

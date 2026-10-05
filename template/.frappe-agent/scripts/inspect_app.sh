@@ -6,6 +6,11 @@
 # Usage (from anywhere inside a bench):
 #   .frappe-agent/scripts/inspect_app.sh            # list apps and sites
 #   .frappe-agent/scripts/inspect_app.sh <app_name> # inspect one app
+#   .frappe-agent/scripts/inspect_app.sh <app_name> --filter <word>  # only DocTypes/modules matching <word>
+#   .frappe-agent/scripts/inspect_app.sh <app_name> --all            # no output caps
+#
+# Long lists are capped so large apps do not flood the agent's context; the
+# output says how to see the rest.
 
 set -uo pipefail
 
@@ -46,7 +51,16 @@ if [ $# -eq 0 ]; then
   exit 0
 fi
 
-APP="$1"
+APP="$1"; shift
+FILTER=""; ALL=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --filter) FILTER="${2:?--filter needs a word}"; shift 2 ;;
+    --all) ALL=1; shift ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
+  esac
+done
+CAP=40
 APP_DIR="$BENCH/apps/$APP"
 PKG="$APP_DIR/$APP"
 [ -d "$APP_DIR" ] || { echo "No such app: apps/$APP" >&2; exit 1; }
@@ -76,19 +90,27 @@ fi
 
 echo
 echo "== Modules (modules.txt)"
-[ -f "$PKG/modules.txt" ] && sed 's/^/  - /' "$PKG/modules.txt" || echo "  none found"
+if [ -f "$PKG/modules.txt" ]; then
+  total="$(grep -c . "$PKG/modules.txt")"
+  if [ "$ALL" -eq 1 ] || [ "$total" -le "$CAP" ]; then sed 's/^/  - /' "$PKG/modules.txt"
+  else head -n "$CAP" "$PKG/modules.txt" | sed 's/^/  - /'; echo "  ... $((total - CAP)) more (use --all)"; fi
+else echo "  none found"; fi
 
 echo
 echo "== hooks.py (top-level settings that are set)"
 if [ -f "$PKG/hooks.py" ]; then
-  grep -nE '^[a-z_]+ *=' "$PKG/hooks.py" | grep -vE '^[0-9]+:(app_name|app_title|app_publisher|app_description|app_email|app_license|app_icon|app_color) ' | sed 's/^/  /' | cut -c1-110
+  hooks_lines="$(grep -nE '^[a-z_]+ *=' "$PKG/hooks.py" | grep -vE '^[0-9]+:(app_name|app_title|app_publisher|app_description|app_email|app_license|app_icon|app_color) ' | cut -c1-110)"
+  htotal="$(printf '%s\n' "$hooks_lines" | grep -c . || true)"
+  if [ "$htotal" -eq 0 ]; then echo "  none set"
+  elif [ "$ALL" -eq 1 ] || [ "$htotal" -le "$CAP" ]; then printf '%s\n' "$hooks_lines" | sed 's/^/  /'
+  else printf '%s\n' "$hooks_lines" | head -n "$CAP" | sed 's/^/  /'; echo "  ... $((htotal - CAP)) more (use --all)"; fi
 else
   echo "  none found"
 fi
 
 echo
 echo "== DocTypes (module / name / flags)"
-count=0
+dt_lines=""
 while IFS= read -r f; do
   base="$(basename "$f" .json)"
   [ "$(basename "$(dirname "$f")")" = "$base" ] || continue
@@ -98,10 +120,25 @@ while IFS= read -r f; do
   grep -qE '"issingle": *1' "$f" && flags="$flags single"
   grep -qE '"is_submittable": *1' "$f" && flags="$flags submittable"
   grep -qE '"custom": *1' "$f" && flags="$flags custom"
-  echo "  - $module / $base${flags:+  [${flags# }]}"
-  count=$((count + 1))
+  dt_lines="$dt_lines$module / $base${flags:+  [${flags# }]}"$'\n'
 done < <(find "$PKG" -path '*/doctype/*/*.json' -not -path '*/node_modules/*' 2>/dev/null | sort)
-[ "$count" -eq 0 ] && echo "  none found"
+dt_lines="${dt_lines%$'\n'}"
+if [ -n "$FILTER" ]; then
+  dt_lines="$(printf '%s\n' "$dt_lines" | grep -iF -- "$FILTER" || true)"
+  echo "  (filtered by: $FILTER)"
+fi
+dtotal="$(printf '%s' "$dt_lines" | grep -c . || true)"
+if [ "$dtotal" -eq 0 ]; then
+  echo "  none found"
+elif [ "$ALL" -eq 1 ] || [ "$dtotal" -le "$CAP" ]; then
+  printf '%s\n' "$dt_lines" | sed 's/^/  - /'
+else
+  echo "  $dtotal DocTypes. Per module:"
+  printf '%s\n' "$dt_lines" | awk -F' / ' '{c[$1]++} END {for (m in c) printf "    %s: %d\n", m, c[m]}' | sort
+  echo "  First $((CAP / 2)):"
+  printf '%s\n' "$dt_lines" | head -n "$((CAP / 2))" | sed 's/^/    - /'
+  echo "  ... use --filter <word> to narrow, or --all to list everything."
+fi
 
 echo
 echo "== Fixtures"
