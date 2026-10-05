@@ -11,12 +11,13 @@ your-bench/
 ├── AGENTS.md          # short entry file: hard rules, process, pointers
 └── .frappe-agent/     # everything else
     ├── docs/          # knowledge base + INDEX.md routing table
-    ├── workflow/      # requirement analysis, implementation, review
-    ├── templates/     # task, run report, deployment plan
+    ├── workflow/      # TASK.md master workflow + step docs; BUG, CODE_REVIEW, DEPLOYMENT
+    ├── templates/     # TASK_RECORD.md, DEPLOYMENT_PLAN.md
     ├── config.json    # approval mode, audit, production sites, protected files (yours; kept on update)
-    ├── scripts/       # inspect_app.sh, new_run.sh, install_git_hooks.sh
+    ├── scripts/       # new_task.sh, task_state.sh, search_history.sh, inspect_app.sh, install_git_hooks.sh
     ├── hooks/         # guard/audit/lint hooks (used with --with-*-hooks)
-    ├── audit/         # local audit trail, created on first use (git-ignored; kept on update)
+    ├── tasks/         # one record per task: history + audit in one file (local, git-ignored, kept on update)
+    ├── audit/         # command log (local, git-ignored, kept on update)
     ├── project_knowledge/   # your app map and decisions (kept on update)
     ├── GIT_WORKFLOW.md, FRAPPE_DEVELOPMENT.md, README.md, VERSION
 ```
@@ -36,8 +37,8 @@ Nothing else in your project is touched. If you already have an `AGENTS.md`, the
 
    | Option | Effect |
    | ------ | ------ |
-   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; your `config.json`, `project_knowledge/` and `audit/` are preserved |
-   | `--force` | Like `--update`, but also resets `config.json` and `project_knowledge/` (the audit trail is never touched) |
+   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; your `config.json`, `project_knowledge/`, `tasks/` and `audit/` are preserved |
+   | `--force` | Like `--update`, but also resets `config.json` and `project_knowledge/` (`tasks/` and `audit/` are never touched) |
    | `--with-claude` | Create `CLAUDE.md` containing `@AGENTS.md` (see below) |
    | `--with-copilot` | Create `.github/copilot-instructions.md` pointing to `AGENTS.md` |
    | `--with-git-hooks` | `pre-push` hook in every `apps/<app>` repo; protects against **any** agent (see [Enforcement](#enforcement-opt-in)) |
@@ -63,20 +64,32 @@ Prefer not to pipe a script into `bash`? Clone this repository and copy `templat
 
 Then start the agent from the bench root and tell it: *"Read AGENTS.md first."*
 
-## Task tiers
-The agent classifies each task before planning: **Trivial** (label/text/typo) gets a one-line plan, **Standard** gets the structured plan, and **Major** (new DocType, patch/schema change, permissions, integrations, jobs, multi-app) also needs the task template, a rollback plan and a migration-impact note. Every tier still needs your approval before code is written. See `.frappe-agent/workflow/REQUIREMENT_ANALYSIS.md`.
+## The task workflow
+Every task follows `.frappe-agent/workflow/TASK.md`:
+
+```text
+UNDERSTAND -> CHECK EXISTING -> CLARIFY -> PROPOSE -> USER DECISION -> LOCK
+           -> EXECUTE -> TEST -> REVIEW -> SUMMARY + AUDIT -> USER APPROVAL -> COMPLETE -> UPDATE HISTORY
+```
+
+* **Risk levels:** **LOW** (text/label/typo; no approval wait, summary only), **MEDIUM** (business logic, validation, scripts, reports, APIs; full flow with your approval), **HIGH** (migration/patch, permissions/security, production-impacting; adds rollback plan, test-site validation, deployment plan, tests may not be skipped).
+* **Ask at the start of every task.** The agent gives its understanding and asks whether to propose a solution and wait for your decision, or run automatically. Automatic is never offered for HIGH and never skips the permission rules. Configurable (`approval_mode`).
+* **Clarify, don't guess.** Ambiguous business points become short questions with options.
+* **Solution lock.** Once you decide, the solution is locked; the agent cannot change it silently and must come back to you if it has to.
+* **Task states** (`DRAFT` to `COMPLETED`, plus `BLOCKED`) are tracked by `scripts/task_state.sh`, which rejects out-of-order moves and requires the agent to quote your words when locking or completing.
+* **History as memory.** Each MEDIUM/HIGH task is one local file with a short card on top; `scripts/search_history.sh <keywords>` shows only the cards of matching past tasks, plus decisions and git history, so the agent checks existing work cheaply before building.
+* **Other workflows:** `BUG.md` (reproduce, diagnose, fix, regression test), `CODE_REVIEW.md`, `DEPLOYMENT.md`.
 
 ## Discovery and verification
-* `.frappe-agent/scripts/inspect_app.sh [app]` prints an app's branch, modules, `hooks.py` settings, DocTypes, fixtures and patches. It is read-only and the analysis step uses it.
-* `.frappe-agent/workflow/REVIEW.md` lists the commands the agent must actually run per tier (linter, `bench run-tests`, and `bench migrate` on a test site for Major changes) and asks for a separate read-only reviewer on the diff.
+* `.frappe-agent/scripts/inspect_app.sh [app]` prints an app's branch, modules, `hooks.py` settings, DocTypes, fixtures and patches. It is read-only.
+* `.frappe-agent/workflow/REVIEW.md` lists the commands the agent must actually run per risk level (linter, `bench run-tests`, and `bench migrate` on a test site for HIGH changes) and asks for a separate read-only reviewer on the diff.
 
 ## Controls this template adds
-* **Ask at the start of every task.** The agent says what it understood and asks whether to wait for plan approval or run automatically. Auto is never offered for Major tasks and never skips the permission rules. Configurable (`approval_mode`).
-* **Acceptance criteria** in every Standard/Major plan, so "done" has a definition.
-* **Permission policy** (Low: automatic, Medium: ask, High: prohibited) in `workflow/PERMISSIONS_AND_PRODUCTION.md`.
+* **Acceptance criteria** in every MEDIUM/HIGH proposal, so "done" has a definition.
+* **Permission policy** (action levels: automatic, ask first, prohibited) in `workflow/PERMISSIONS_AND_PRODUCTION.md`.
 * **Production is read-only for the agent.** It writes a deployment plan (`templates/DEPLOYMENT_PLAN.md`); a human runs it. Configure your production sites and hosts in `config.json`.
 * **Secrets stay out of the agent's context** (`.env`, `site_config.json`, keys).
-* **Audit trail:** a local `RUN-YYYY-NNN.md` per task (requirement, criteria, files, commands, real test output, risks, commit) plus an optional command log. Stored in `.frappe-agent/audit/`, outside git.
+* **Audit trail:** the task record holds requirement, criteria, locked solution, files, commands, real test output, risks, approval and commit, stored locally in `.frappe-agent/tasks/` (outside git; `history.path` can point to a shared folder), plus an optional command log.
 
 Everything is configured in `.frappe-agent/config.json`; see `.frappe-agent/CONFIGURATION.md` for the full guide.
 
@@ -114,11 +127,12 @@ The agent follows the app's config and never bypasses it with `--no-verify`.
 The bench root is usually not a Git repository; each app under `apps/` is. The agent runs Git operations inside the app being changed and never pushes to `main`/`master`. Details are in `.frappe-agent/GIT_WORKFLOW.md`.
 
 ## Basic workflow
-1. **You:** describe the task.
-2. **Agent:** reads `AGENTS.md`, routes to the relevant docs via `docs/INDEX.md`, analyzes the bench, and presents a plan.
-3. **You:** approve or request changes.
-4. **Agent:** implements, then self-reviews with `workflow/REVIEW.md`.
-5. **Agent:** records lasting facts and decisions in `project_knowledge/`.
+1. **You:** describe the task in plain language.
+2. **Agent:** reads `AGENTS.md`, classifies the risk, searches past work, and asks whether to propose and wait for your decision or run automatically.
+3. **You:** answer its questions and choose a solution; it locks your decision.
+4. **Agent:** implements only the locked solution, tests with real commands, reviews the diff, and gives a summary.
+5. **You:** approve (MEDIUM/HIGH). The agent then records the task and updates `project_knowledge/`.
+6. **Production:** the agent writes a deployment plan; you deploy and report the result.
 
 ## Updating from an older install
 Older versions copied files (`FRAPPE_DEVELOPMENT.md`, `docs/`, `workflow/`, …) into the project root. The installer detects these and lists them; once you've checked they hold no local changes, delete them by hand.

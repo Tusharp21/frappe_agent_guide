@@ -8,9 +8,9 @@
 # Options (pass after `bash -s --` when piping, or directly when run as a file):
 #   -d, --dir <path>     Install into <path> instead of the current directory.
 #   -u, --update         Replace template files in an existing .frappe-agent/.
-#                        Your config.json, project_knowledge/ and audit/ are kept.
+#                        Your config.json, project_knowledge/, tasks/ and audit/ are kept.
 #   -f, --force          Like --update, but also resets config.json and
-#                        project_knowledge/ (audit/ is never touched).
+#                        project_knowledge/ (tasks/ and audit/ are never touched).
 #   -b, --branch <name>  Install from a branch (default: master).
 #       --version <tag>  Install from a release tag instead of a branch.
 #       --with-claude    Create CLAUDE.md containing "@AGENTS.md" if it does not exist.
@@ -177,7 +177,7 @@ install_json() {
 # Items inside .frappe-agent/ that hold the user's data.
 is_user_data() {
   case "$1" in
-    audit) return 0 ;;
+    audit|tasks) return 0 ;;
     project_knowledge|config.json) [ "$FORCE" -ne 1 ] && return 0 || return 1 ;;
     *) return 1 ;;
   esac
@@ -193,7 +193,7 @@ if [ -e "$DEST" ] && [ "$UPDATE" -ne 1 ]; then
 else
   REFRESH=1
   if [ -e "$DEST" ]; then
-    echo "  ~ updating .frappe-agent/ (keeping your config.json, project_knowledge/ and audit/)"
+    echo "  ~ updating .frappe-agent/ (keeping your config.json, project_knowledge/, tasks/ and audit/)"
     [ "$FORCE" -eq 1 ] && echo "    --force: config.json and project_knowledge/ will be reset"
     for entry in "$DEST"/* "$DEST"/.[!.]*; do
       [ -e "$entry" ] || continue
@@ -235,6 +235,15 @@ fi
 # --- Enforcement (opt-in) -------------------------------------------------
 if [ "$HOOKS_CLAUDE" -eq 1 ]; then
   install_json "$ADAPTERS/claude/settings.json" "$TARGET_DIR/.claude/settings.json" ".claude/settings.json (guard, lint and audit hooks)"
+  # Skills that older versions installed and this version no longer ships.
+  if [ "$UPDATE" -eq 1 ]; then
+    for old in frappe-analyze frappe-implement; do
+      if [ -d "$TARGET_DIR/.claude/skills/$old" ]; then
+        echo "  - removed outdated .claude/skills/$old"
+        run rm -rf "$TARGET_DIR/.claude/skills/$old"
+      fi
+    done
+  fi
   for skill in "$ADAPTERS"/claude/skills/*/; do
     name="$(basename "$skill")"
     dest_skill="$TARGET_DIR/.claude/skills/$name"
