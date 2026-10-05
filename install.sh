@@ -15,7 +15,7 @@
 #       --version <tag>  Install from a release tag instead of a branch.
 #       --with-claude    Create CLAUDE.md containing "@AGENTS.md" if it does not exist.
 #       --with-copilot   Create .github/copilot-instructions.md pointing to AGENTS.md.
-#   Enforcement (all optional; see .frappe-agent/CONFIGURATION.md):
+#   Enforcement (all optional; see guide/04-safety-and-enforcement.md in the repository):
 #       --with-git-hooks      pre-push hook in every apps/<app> repo (works for any agent)
 #       --with-claude-hooks   .claude/settings.json hooks and .claude/skills/
 #       --with-cursor-hooks   .cursor/hooks.json and a .cursorignore block
@@ -296,7 +296,8 @@ fi
 echo
 echo "Done. Next steps:"
 echo "  - Edit .frappe-agent/config.json: set environments.production to your real"
-echo "    production site names and hosts (guide: .frappe-agent/CONFIGURATION.md)."
+echo "    production site names and hosts. What each setting means:"
+echo "    https://github.com/Tusharp21/frappe_agent_guide/blob/master/guide/02-configuration.md"
 echo "  - Start your AI agent from ${TARGET_DIR} and ask it to read AGENTS.md."
 if [ "$HOOKS_CLAUDE$HOOKS_CURSOR$HOOKS_COPILOT" != "000" ]; then
   echo "  - Restart your agent so it loads the hooks, then try a blocked command"

@@ -1,4 +1,5 @@
 {
+  "_help": "What each setting means: https://github.com/Tusharp21/frappe_agent_guide/blob/master/guide/02-configuration.md",
   "approval_mode": "ask_each_task",
   "auto_mode_allowed_risk": [
     "low",

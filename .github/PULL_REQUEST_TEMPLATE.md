@@ -21,7 +21,7 @@
 - [ ] Internal links checked (relative paths resolve, no dead links)
 - [ ] Code fences are balanced (no broken Markdown rendering)
 - [ ] If `install.sh` / `uninstall.sh` changed: tested locally with `--dir` against a scratch directory
-- [ ] Nothing new is installed outside `AGENTS.md` and `.frappe-agent/` (new content lives under `template/`); new docs have a row in `docs/INDEX.md`
+- [ ] Nothing new is installed outside `AGENTS.md` and `.frappe-agent/` (new content lives under `template/`); new knowledge parts have a row in `knowledge/INDEX.md`; human-facing docs are in `guide/`, not in `template/`
 
 ## How this was verified
 
