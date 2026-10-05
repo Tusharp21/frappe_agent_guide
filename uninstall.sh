@@ -9,7 +9,7 @@
 #   -d, --dir <path>   Uninstall from <path> instead of the current directory.
 #   -y, --yes          Skip the confirmation prompt (needed for non-interactive shells).
 #       --keep-knowledge  Keep your data in .frappe-agent/: config.json,
-#                      project_knowledge/, tasks/ (task history) and audit/.
+#                      policy.json, project_knowledge/, tasks/ (task history) and audit/.
 #   -h, --help         Show this help text.
 #
 # Removes the .frappe-agent/ folder and the marked "frappe-agent" block from
@@ -127,9 +127,9 @@ echo
 echo "The following will be removed:"
 if [ "$folder_present" -eq 1 ]; then
   if [ "$KEEP_KNOWLEDGE" -eq 1 ]; then
-    echo "  - .frappe-agent/ (except config.json, project_knowledge/, tasks/ and audit/)"
+    echo "  - .frappe-agent/ (except config.json, policy.json, project_knowledge/, tasks/ and audit/)"
   else
-    echo "  - .frappe-agent/ (including config.json, project_knowledge/, the tasks/ history and audit/)"
+    echo "  - .frappe-agent/ (including config.json, policy.json, project_knowledge/, the tasks/ history and audit/)"
   fi
 fi
 for spec in "${block_specs_present[@]}"; do echo "  - frappe-agent block in ${spec%%|*}"; done
@@ -189,10 +189,10 @@ if [ "$folder_present" -eq 1 ]; then
   if [ "$KEEP_KNOWLEDGE" -eq 1 ]; then
     for entry in "$FA"/* "$FA"/.[!.]*; do
       [ -e "$entry" ] || continue
-      case "$(basename "$entry")" in project_knowledge|tasks|audit|config.json) continue ;; esac
+      case "$(basename "$entry")" in project_knowledge|tasks|audit|config.json|policy.json) continue ;; esac
       rm -rf "$entry"
     done
-    echo "  - removed .frappe-agent/ contents (kept config.json, project_knowledge/, tasks/ and audit/)"
+    echo "  - removed .frappe-agent/ contents (kept config.json, policy.json, project_knowledge/, tasks/ and audit/)"
   else
     rm -rf "${TARGET_DIR:?}/.frappe-agent"
     echo "  - removed .frappe-agent/"

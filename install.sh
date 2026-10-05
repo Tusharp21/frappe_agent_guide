@@ -8,8 +8,8 @@
 # Options (pass after `bash -s --` when piping, or directly when run as a file):
 #   -d, --dir <path>     Install into <path> instead of the current directory.
 #   -u, --update         Replace template files in an existing .frappe-agent/.
-#                        Your config.json, project_knowledge/, tasks/ and audit/ are kept.
-#   -f, --force          Like --update, but also resets config.json and
+#                        Your config.json, policy.json, project_knowledge/, tasks/ and audit/ are kept.
+#   -f, --force          Like --update, but also resets config.json, policy.json and
 #                        project_knowledge/ (tasks/ and audit/ are never touched).
 #   -b, --branch <name>  Install from a branch (default: master).
 #       --version <tag>  Install from a release tag instead of a branch.
@@ -178,7 +178,7 @@ install_json() {
 is_user_data() {
   case "$1" in
     audit|tasks) return 0 ;;
-    project_knowledge|config.json) [ "$FORCE" -ne 1 ] && return 0 || return 1 ;;
+    project_knowledge|config.json|policy.json) [ "$FORCE" -ne 1 ] && return 0 || return 1 ;;
     *) return 1 ;;
   esac
 }
@@ -188,13 +188,13 @@ DEST="$TARGET_DIR/.frappe-agent"
 ADAPTERS="$SRC_DIR/.frappe-agent/adapters"
 echo "Installing:"
 if [ -e "$DEST" ] && [ "$UPDATE" -ne 1 ]; then
-  echo "  = .frappe-agent/ already exists (use --update to refresh it; --force also resets config.json and project_knowledge/)"
+  echo "  = .frappe-agent/ already exists (use --update to refresh it; --force also resets config.json, policy.json and project_knowledge/)"
   REFRESH=0
 else
   REFRESH=1
   if [ -e "$DEST" ]; then
-    echo "  ~ updating .frappe-agent/ (keeping your config.json, project_knowledge/, tasks/ and audit/)"
-    [ "$FORCE" -eq 1 ] && echo "    --force: config.json and project_knowledge/ will be reset"
+    echo "  ~ updating .frappe-agent/ (keeping your config.json, policy.json, project_knowledge/, tasks/ and audit/)"
+    [ "$FORCE" -eq 1 ] && echo "    --force: config.json, policy.json and project_knowledge/ will be reset"
     for entry in "$DEST"/* "$DEST"/.[!.]*; do
       [ -e "$entry" ] || continue
       is_user_data "$(basename "$entry")" && continue

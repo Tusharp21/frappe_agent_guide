@@ -12,8 +12,9 @@ your-bench/
 └── .frappe-agent/     # everything else
     ├── docs/          # knowledge base + INDEX.md routing table
     ├── workflow/      # TASK.md master workflow + step docs; BUG, CODE_REVIEW, DEPLOYMENT
-    ├── templates/     # TASK_RECORD.md, DEPLOYMENT_PLAN.md
-    ├── config.json    # approval mode, audit, production sites, protected files (yours; kept on update)
+    ├── templates/     # TASK_RECORD.md (+ sections added step by step), DEPLOYMENT_PLAN.md
+    ├── config.json    # workflow settings: approval mode, risk levels, history, production sites (yours; kept on update)
+    ├── policy.json    # hook patterns: protected files, blocked/ask-first commands (yours; kept on update)
     ├── scripts/       # new_task.sh, task_state.sh, search_history.sh, inspect_app.sh, install_git_hooks.sh
     ├── hooks/         # guard/audit/lint hooks (used with --with-*-hooks)
     ├── tasks/         # one record per task: history + audit in one file (local, git-ignored, kept on update)
@@ -37,8 +38,8 @@ Nothing else in your project is touched. If you already have an `AGENTS.md`, the
 
    | Option | Effect |
    | ------ | ------ |
-   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; your `config.json`, `project_knowledge/`, `tasks/` and `audit/` are preserved |
-   | `--force` | Like `--update`, but also resets `config.json` and `project_knowledge/` (`tasks/` and `audit/` are never touched) |
+   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; your `config.json`, `policy.json`, `project_knowledge/`, `tasks/` and `audit/` are preserved |
+   | `--force` | Like `--update`, but also resets `config.json`, `policy.json` and `project_knowledge/` (`tasks/` and `audit/` are never touched) |
    | `--with-claude` | Create `CLAUDE.md` containing `@AGENTS.md` (see below) |
    | `--with-copilot` | Create `.github/copilot-instructions.md` pointing to `AGENTS.md` |
    | `--with-git-hooks` | `pre-push` hook in every `apps/<app>` repo; protects against **any** agent (see [Enforcement](#enforcement-opt-in)) |
@@ -91,7 +92,7 @@ UNDERSTAND -> CHECK EXISTING -> CLARIFY -> PROPOSE -> USER DECISION -> LOCK
 * **Secrets stay out of the agent's context** (`.env`, `site_config.json`, keys).
 * **Audit trail:** the task record holds requirement, criteria, locked solution, files, commands, real test output, risks, approval and commit, stored locally in `.frappe-agent/tasks/` (outside git; `history.path` can point to a shared folder), plus an optional command log.
 
-Everything is configured in `.frappe-agent/config.json`; see `.frappe-agent/CONFIGURATION.md` for the full guide.
+Everything is configured in `.frappe-agent/config.json` (workflow) and `.frappe-agent/policy.json` (hook patterns); see `.frappe-agent/CONFIGURATION.md` for the full guide.
 
 ## Enforcement (opt-in)
 Rules in `AGENTS.md` are advisory. These layers enforce them:
@@ -103,7 +104,7 @@ Rules in `AGENTS.md` are advisory. These layers enforce them:
 | Cursor hooks (`--with-cursor-hooks`) | Cursor | Everything below; `.cursorignore` also hides secrets from file reads |
 | Copilot hooks (`--with-copilot-hooks`) | Copilot (VS Code agent mode, CLI, coding agent) | Everything below |
 
-What the hooks decide, from one shared `hooks/guard.sh` driven by `config.json`:
+What the hooks decide, from one shared `hooks/guard.sh` driven by `policy.json` and `config.json`:
 * **Blocked:** push to `main`/`master`, force-push, `--no-verify`, `reset --hard`, `clean`, `branch -D`, `--ours`/`--theirs`; any command targeting a production site or host; reading or editing protected files; destructive SQL, `bench drop-site`, firewall/DNS changes.
 * **Asks first:** dependency installs, `bench migrate`/`restore`/`execute`/…, deletes, `curl`/`wget`, `git push`, `sudo`.
 
@@ -112,6 +113,15 @@ Honest limits:
 * The strongest protection for production is to **keep production credentials out of the agent's environment** (no production SSH keys or `site_config.json` on that machine).
 * The Cursor and Copilot hook formats are newer and were verified against their documentation, not in a live session. After installing, ask the agent to `cat .env` and confirm it is refused.
 * `.cursorignore` does not stop terminal commands (the hook does); Copilot's content exclusion is a GitHub setting that does not apply to agent mode (the hook does).
+
+## Token efficiency
+The agent reads only what a step needs, not the whole knowledge base:
+* `AGENTS.md` (always loaded) has a short LOW-task path, so a typo fix never reads the task workflow.
+* `docs/INDEX.md` routes to one doc, and `scripts/doc_sections.sh <NN>` lists its headings with line ranges so only one section is read.
+* `GIT_WORKFLOW.md` holds the rules; examples and templates are in `GIT_REFERENCE.md`, read only when needed.
+* The task record starts as a short card; `scripts/task_section.sh` appends each section's format only when that step is reached, and `scripts/search_history.sh` shows future tasks just the card.
+* `config.json` is small (what the agent reads); the regex patterns for hooks are in `policy.json`.
+* `scripts/inspect_app.sh` caps long lists (use `--filter` or `--all`).
 
 ## Linting (pre-commit)
 This template does not ship a pre-commit config. Each Frappe app has its own `.pre-commit-config.yaml`; enable it once per app:
