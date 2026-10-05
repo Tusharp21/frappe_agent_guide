@@ -8,14 +8,20 @@
 # Options (pass after `bash -s --` when piping, or directly when run as a file):
 #   -d, --dir <path>   Uninstall from <path> instead of the current directory.
 #   -y, --yes          Skip the confirmation prompt (needed for non-interactive shells).
-#       --keep-knowledge  Keep .frappe-agent/project_knowledge/ (your notes and decisions).
+#       --keep-knowledge  Keep your data in .frappe-agent/: config.json,
+#                      project_knowledge/ and audit/ (the audit trail).
 #   -h, --help         Show this help text.
 #
 # Removes the .frappe-agent/ folder and the marked "frappe-agent" block from
-# AGENTS.md, CLAUDE.md and .github/copilot-instructions.md. A file is deleted
-# only if nothing but that block was in it. Anything else you wrote in those
-# files is left untouched. Also removes the frappe-* skills in .claude/skills/
-# and .claude/settings.json, but only if it is unmodified from the template's.
+# AGENTS.md, CLAUDE.md, .github/copilot-instructions.md and .cursorignore. A
+# file is deleted only if nothing but that block was in it. Also removes what
+# the --with-* options installed: the frappe-* skills in .claude/skills/, the
+# pre-push hooks in apps/*/.git/hooks, and the hook files
+# (.claude/settings.json, .cursor/hooks.json, .github/hooks/frappe-agent.json),
+# but only if they are unmodified copies of the template's. Anything else you
+# wrote is left untouched.
+#
+# NOTE: without --keep-knowledge, audit/ (your audit trail) is deleted too.
 
 set -euo pipefail
 
@@ -23,11 +29,8 @@ TARGET_DIR="$(pwd)"
 ASSUME_YES=0
 KEEP_KNOWLEDGE=0
 
-START_MARK="<!-- frappe-agent:start -->"
-END_MARK="<!-- frappe-agent:end -->"
-
 print_help() {
-  sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,/^# NOTE:/p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 while [ $# -gt 0 ]; do
@@ -44,44 +47,75 @@ TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-has_block() { [ -f "$1" ] && grep -qF "$START_MARK" "$1"; }
+FA="$TARGET_DIR/.frappe-agent"
+MD_START="<!-- frappe-agent:start -->"; MD_END="<!-- frappe-agent:end -->"
+IG_START="# frappe-agent:start";        IG_END="# frappe-agent:end"
 
+# strip_block <file> <start> <end>: print the file without the marked block.
 strip_block() {
-  awk -v s="$START_MARK" -v e="$END_MARK" '
+  awk -v s="$2" -v e="$3" '
     index($0, s) { skip = 1 }
     !skip { print }
     index($0, e) { skip = 0 }
   ' "$1"
 }
+has_block() { [ -f "$1" ] && grep -qF "$2" "$1"; }
+
+# --- marked-block files: file|start|end ------------------------------------
+BLOCK_SPECS=(
+  "AGENTS.md|$MD_START|$MD_END"
+  "CLAUDE.md|$MD_START|$MD_END"
+  ".github/copilot-instructions.md|$MD_START|$MD_END"
+  ".cursorignore|$IG_START|$IG_END"
+)
+block_specs_present=()
+for spec in "${BLOCK_SPECS[@]}"; do
+  IFS='|' read -r f s e <<<"$spec"
+  has_block "$TARGET_DIR/$f" "$s" && block_specs_present+=("$spec")
+done
+
+# --- whole files that must be unmodified copies: dest|adapter source -------
+JSON_SPECS=(
+  ".claude/settings.json|claude/settings.json"
+  ".cursor/hooks.json|cursor/hooks.json"
+  ".github/hooks/frappe-agent.json|copilot/frappe-agent.json"
+)
+json_remove=(); json_note=()
+for spec in "${JSON_SPECS[@]}"; do
+  IFS='|' read -r dest adapter <<<"$spec"
+  path="$TARGET_DIR/$dest"
+  if [ -f "$path" ] && grep -qF ".frappe-agent/hooks/" "$path"; then
+    if [ -f "$FA/adapters/$adapter" ] && cmp -s "$path" "$FA/adapters/$adapter"; then
+      json_remove+=("$dest")
+    else
+      json_note+=("$dest")
+    fi
+  fi
+done
 
 SKILL_NAMES=("frappe-analyze" "frappe-implement" "frappe-review")
-CLAUDE_ADAPTER="$TARGET_DIR/.frappe-agent/adapters/claude/settings.json"
-claude_settings="$TARGET_DIR/.claude/settings.json"
-# settings.json is removed only if it is byte-identical to what we installed.
-remove_settings=0
-settings_note=0
-if [ -f "$claude_settings" ] && grep -qF ".frappe-agent/hooks/guard.sh" "$claude_settings"; then
-  if [ -f "$CLAUDE_ADAPTER" ] && cmp -s "$claude_settings" "$CLAUDE_ADAPTER"; then
-    remove_settings=1
-  else
-    settings_note=1
-  fi
-fi
 skills_present=()
 for n in "${SKILL_NAMES[@]}"; do
   [ -d "$TARGET_DIR/.claude/skills/$n" ] && skills_present+=("$n")
 done
 
-FILES=("AGENTS.md" "CLAUDE.md" ".github/copilot-instructions.md")
-block_files=()
-for f in "${FILES[@]}"; do
-  has_block "$TARGET_DIR/$f" && block_files+=("$f")
-done
-folder_present=0
-[ -d "$TARGET_DIR/.frappe-agent" ] && folder_present=1
+git_hook_repos=()
+if [ -d "$TARGET_DIR/apps" ]; then
+  for d in "$TARGET_DIR"/apps/*/; do
+    [ -d "$d" ] || continue
+    hp="$(git -C "$d" rev-parse --git-path hooks 2>/dev/null)" || continue
+    case "$hp" in /*) ;; *) hp="$d$hp" ;; esac
+    if [ -f "$hp/pre-push" ] && grep -qF "# frappe-agent pre-push" "$hp/pre-push"; then
+      git_hook_repos+=("$(basename "$d")|$hp/pre-push")
+    fi
+  done
+fi
 
-if [ "$folder_present" -eq 0 ] && [ "${#block_files[@]}" -eq 0 ] \
-   && [ "$remove_settings" -eq 0 ] && [ "$settings_note" -eq 0 ] && [ "${#skills_present[@]}" -eq 0 ]; then
+folder_present=0
+[ -d "$FA" ] && folder_present=1
+
+if [ "$folder_present" -eq 0 ] && [ "${#block_specs_present[@]}" -eq 0 ] && [ "${#json_remove[@]}" -eq 0 ] \
+   && [ "${#json_note[@]}" -eq 0 ] && [ "${#skills_present[@]}" -eq 0 ] && [ "${#git_hook_repos[@]}" -eq 0 ]; then
   echo "Nothing to remove — no template files found in: $TARGET_DIR"
   exit 0
 fi
@@ -92,16 +126,15 @@ echo
 echo "The following will be removed:"
 if [ "$folder_present" -eq 1 ]; then
   if [ "$KEEP_KNOWLEDGE" -eq 1 ]; then
-    echo "  - .frappe-agent/ (except project_knowledge/)"
+    echo "  - .frappe-agent/ (except config.json, project_knowledge/ and audit/)"
   else
-    echo "  - .frappe-agent/ (including project_knowledge/)"
+    echo "  - .frappe-agent/ (including config.json, project_knowledge/ and the audit/ trail)"
   fi
 fi
-for f in "${block_files[@]}"; do
-  echo "  - frappe-agent block in $f"
-done
-[ "$remove_settings" -eq 1 ] && echo "  - .claude/settings.json (unmodified copy of the template's)"
+for spec in "${block_specs_present[@]}"; do echo "  - frappe-agent block in ${spec%%|*}"; done
+for d in "${json_remove[@]}"; do echo "  - $d (unmodified copy of the template's)"; done
 for n in "${skills_present[@]}"; do echo "  - .claude/skills/$n"; done
+for r in "${git_hook_repos[@]}"; do echo "  - pre-push hook in apps/${r%%|*}"; done
 echo
 
 if [ "$ASSUME_YES" -ne 1 ]; then
@@ -117,9 +150,10 @@ if [ "$ASSUME_YES" -ne 1 ]; then
   esac
 fi
 
-for f in "${block_files[@]}"; do
+for spec in "${block_specs_present[@]}"; do
+  IFS='|' read -r f s e <<<"$spec"
   path="$TARGET_DIR/$f"
-  strip_block "$path" > "$TMP_DIR/stripped"
+  strip_block "$path" "$s" "$e" > "$TMP_DIR/stripped"
   if [ -z "$(tr -d '[:space:]' < "$TMP_DIR/stripped")" ]; then
     rm -f "$path"
     echo "  - removed $f"
@@ -131,28 +165,33 @@ for f in "${block_files[@]}"; do
   fi
 done
 
-if [ "$remove_settings" -eq 1 ]; then
-  rm -f "$claude_settings"
-  echo "  - removed .claude/settings.json"
-fi
-if [ "$settings_note" -eq 1 ]; then
-  echo "  ! .claude/settings.json was edited after install, so it was left alone."
-  echo "    Remove the .frappe-agent/hooks/guard.sh and lint.sh entries from it by hand."
-fi
+for d in "${json_remove[@]}"; do
+  rm -f "$TARGET_DIR/$d"
+  echo "  - removed $d"
+done
+for d in "${json_note[@]}"; do
+  echo "  ! $d was edited after install, so it was left alone."
+  echo "    Remove the .frappe-agent/hooks/ entries from it by hand."
+done
 for n in "${skills_present[@]}"; do
   rm -rf "${TARGET_DIR:?}/.claude/skills/$n"
   echo "  - removed .claude/skills/$n"
 done
-rmdir "$TARGET_DIR/.claude/skills" "$TARGET_DIR/.claude" 2>/dev/null || true
+for r in "${git_hook_repos[@]}"; do
+  rm -f "${r#*|}"
+  echo "  - removed pre-push hook in apps/${r%%|*}"
+done
+rmdir "$TARGET_DIR/.claude/skills" "$TARGET_DIR/.claude" "$TARGET_DIR/.cursor" \
+      "$TARGET_DIR/.github/hooks" "$TARGET_DIR/.github" 2>/dev/null || true
 
 if [ "$folder_present" -eq 1 ]; then
-  if [ "$KEEP_KNOWLEDGE" -eq 1 ] && [ -d "$TARGET_DIR/.frappe-agent/project_knowledge" ]; then
-    for entry in "$TARGET_DIR/.frappe-agent"/* "$TARGET_DIR/.frappe-agent"/.[!.]*; do
+  if [ "$KEEP_KNOWLEDGE" -eq 1 ]; then
+    for entry in "$FA"/* "$FA"/.[!.]*; do
       [ -e "$entry" ] || continue
-      [ "$(basename "$entry")" = "project_knowledge" ] && continue
+      case "$(basename "$entry")" in project_knowledge|audit|config.json) continue ;; esac
       rm -rf "$entry"
     done
-    echo "  - removed .frappe-agent/ contents (kept project_knowledge/)"
+    echo "  - removed .frappe-agent/ contents (kept config.json, project_knowledge/ and audit/)"
   else
     rm -rf "${TARGET_DIR:?}/.frappe-agent"
     echo "  - removed .frappe-agent/"

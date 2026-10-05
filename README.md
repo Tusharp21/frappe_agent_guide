@@ -12,8 +12,11 @@ your-bench/
 └── .frappe-agent/     # everything else
     ├── docs/          # knowledge base + INDEX.md routing table
     ├── workflow/      # requirement analysis, implementation, review
-    ├── templates/     # task template
-    ├── scripts/       # inspect_app.sh: read-only bench/app discovery
+    ├── templates/     # task, run report, deployment plan
+    ├── config.json    # approval mode, audit, production sites, protected files (yours; kept on update)
+    ├── scripts/       # inspect_app.sh, new_run.sh, install_git_hooks.sh
+    ├── hooks/         # guard/audit/lint hooks (used with --with-*-hooks)
+    ├── audit/         # local audit trail, created on first use (git-ignored; kept on update)
     ├── project_knowledge/   # your app map and decisions (kept on update)
     ├── GIT_WORKFLOW.md, FRAPPE_DEVELOPMENT.md, README.md, VERSION
 ```
@@ -33,11 +36,15 @@ Nothing else in your project is touched. If you already have an `AGENTS.md`, the
 
    | Option | Effect |
    | ------ | ------ |
-   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; `project_knowledge/` is preserved |
-   | `--force` | Like `--update`, but also resets `project_knowledge/` |
+   | `--update` | Refresh `.frappe-agent/` and the `AGENTS.md` block; your `config.json`, `project_knowledge/` and `audit/` are preserved |
+   | `--force` | Like `--update`, but also resets `config.json` and `project_knowledge/` (the audit trail is never touched) |
    | `--with-claude` | Create `CLAUDE.md` containing `@AGENTS.md` (see below) |
    | `--with-copilot` | Create `.github/copilot-instructions.md` pointing to `AGENTS.md` |
-   | `--with-claude-hooks` | Claude Code only: add `.claude/settings.json` (guard + lint hooks) and `.claude/skills/` (see [Enforcement](#enforcement-claude-code-opt-in)). Off by default, so the default install stays at two items |
+   | `--with-git-hooks` | `pre-push` hook in every `apps/<app>` repo; protects against **any** agent (see [Enforcement](#enforcement-opt-in)) |
+   | `--with-claude-hooks` | `.claude/settings.json` hooks and `.claude/skills/` |
+   | `--with-cursor-hooks` | `.cursor/hooks.json` and a `.cursorignore` block |
+   | `--with-copilot-hooks` | `.github/hooks/frappe-agent.json` |
+   | `--with-all-hooks` | All four of the above. None are on by default, so the default install stays at two items |
    | `--dir <path>` | Install somewhere other than the current directory |
    | `--branch <name>` / `--version <tag>` | Install from a branch or release tag |
    | `--dry-run` | Show what would change; write nothing |
@@ -63,14 +70,35 @@ The agent classifies each task before planning: **Trivial** (label/text/typo) ge
 * `.frappe-agent/scripts/inspect_app.sh [app]` prints an app's branch, modules, `hooks.py` settings, DocTypes, fixtures and patches. It is read-only and the analysis step uses it.
 * `.frappe-agent/workflow/REVIEW.md` lists the commands the agent must actually run per tier (linter, `bench run-tests`, and `bench migrate` on a test site for Major changes) and asks for a separate read-only reviewer on the diff.
 
-## Enforcement (Claude Code, opt-in)
-Rules in `AGENTS.md` are advisory. With `--with-claude-hooks`, Claude Code additionally gets:
+## Controls this template adds
+* **Ask at the start of every task.** The agent says what it understood and asks whether to wait for plan approval or run automatically. Auto is never offered for Major tasks and never skips the permission rules. Configurable (`approval_mode`).
+* **Acceptance criteria** in every Standard/Major plan, so "done" has a definition.
+* **Permission policy** (Low: automatic, Medium: ask, High: prohibited) in `workflow/PERMISSIONS_AND_PRODUCTION.md`.
+* **Production is read-only for the agent.** It writes a deployment plan (`templates/DEPLOYMENT_PLAN.md`); a human runs it. Configure your production sites and hosts in `config.json`.
+* **Secrets stay out of the agent's context** (`.env`, `site_config.json`, keys).
+* **Audit trail:** a local `RUN-YYYY-NNN.md` per task (requirement, criteria, files, commands, real test output, risks, commit) plus an optional command log. Stored in `.frappe-agent/audit/`, outside git.
 
-* **A guard hook** that blocks, before they run: `git push` to `main`/`master` (including a bare `git push` while on one), force-push, `--no-verify`, `git reset --hard`, `git clean -fd`, `git branch -D`, and `--ours`/`--theirs` conflict resolution, the same list as `GIT_WORKFLOW.md`.
-* **A lint hook** that runs `ruff check` on each edited Python file and feeds findings back to the agent (skipped if `ruff` is not installed).
-* **Skills** `frappe-analyze`, `frappe-implement` and `frappe-review` that wrap the workflow files.
+Everything is configured in `.frappe-agent/config.json`; see `.frappe-agent/CONFIGURATION.md` for the full guide.
 
-An existing `.claude/settings.json` is never overwritten: the installer tells you to merge the hooks by hand. Cursor and Copilot have no equivalent hook mechanism, so for them the rules stay advisory. The hooks are an aid, not a security boundary.
+## Enforcement (opt-in)
+Rules in `AGENTS.md` are advisory. These layers enforce them:
+
+| Layer | Covers | Blocks / asks |
+| ----- | ------ | ------------- |
+| Git `pre-push` hook (`--with-git-hooks`) | Every agent and humans | Push to `main`/`master`, remote branch deletion, force-push (humans can use `--no-verify`) |
+| Claude Code hooks (`--with-claude-hooks`) | Claude Code | Everything below, plus a ruff lint check on edited Python and the `frappe-*` skills |
+| Cursor hooks (`--with-cursor-hooks`) | Cursor | Everything below; `.cursorignore` also hides secrets from file reads |
+| Copilot hooks (`--with-copilot-hooks`) | Copilot (VS Code agent mode, CLI, coding agent) | Everything below |
+
+What the hooks decide, from one shared `hooks/guard.sh` driven by `config.json`:
+* **Blocked:** push to `main`/`master`, force-push, `--no-verify`, `reset --hard`, `clean`, `branch -D`, `--ours`/`--theirs`; any command targeting a production site or host; reading or editing protected files; destructive SQL, `bench drop-site`, firewall/DNS changes.
+* **Asks first:** dependency installs, `bench migrate`/`restore`/`execute`/…, deletes, `curl`/`wget`, `git push`, `sudo`.
+
+Honest limits:
+* Hooks are a safety net, not a security boundary: `bash -c "..."` and similar tricks can evade pattern matching.
+* The strongest protection for production is to **keep production credentials out of the agent's environment** (no production SSH keys or `site_config.json` on that machine).
+* The Cursor and Copilot hook formats are newer and were verified against their documentation, not in a live session. After installing, ask the agent to `cat .env` and confirm it is refused.
+* `.cursorignore` does not stop terminal commands (the hook does); Copilot's content exclusion is a GitHub setting that does not apply to agent mode (the hook does).
 
 ## Linting (pre-commit)
 This template does not ship a pre-commit config. Each Frappe app has its own `.pre-commit-config.yaml`; enable it once per app:
