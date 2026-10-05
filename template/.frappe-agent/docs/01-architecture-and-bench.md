@@ -487,4 +487,3 @@ Before adding a hook:
 6. Move complex logic into reusable Python functions.
 
 ---
-

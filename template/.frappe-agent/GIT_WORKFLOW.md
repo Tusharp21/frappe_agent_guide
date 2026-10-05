@@ -16,6 +16,16 @@ The main goals are:
 
 ---
 
+## Where Git Operations Run (Bench Layout)
+
+This template is usually installed in the **bench root** (the folder containing `apps/` and `sites/`). The bench root is normally **not** a Git repository; each app under `apps/<app_name>/` is its own repository.
+
+* Run every Git operation (`status`, `checkout -b`, `add`, `commit`, `push`) **inside the app repository** being changed, e.g. `cd apps/<app_name>`.
+* Do not run `git init` in the bench root, and do not commit `.frappe-agent/` or `AGENTS.md` into an app repository unless the user asks for it.
+* If a task touches more than one app, treat each app as a separate repository with its own branch and Pull Request.
+
+---
+
 ## GitHub Project Identity Check
 
 Before starting **any Git or GitHub operation**, the AI agent must determine whether the repository is a:
@@ -236,19 +246,20 @@ git diff --cached
 
 ### Pre-commit Hooks (Linting)
 
-This project uses the [pre-commit](https://pre-commit.com) framework, configured in `.pre-commit-config.yaml`. It runs `ruff` (Python lint + format) plus common whitespace/YAML/JSON checks automatically on `git commit`.
+Each Frappe app normally ships its own `.pre-commit-config.yaml` (created by `bench new-app`). That file, inside the app repository, is the source of truth for linting. This template does not install a config of its own.
 
 The AI agent must:
 
-* Assume pre-commit hooks are active once `.pre-commit-config.yaml` exists in the repository.
+* Check for `.pre-commit-config.yaml` in the app repository being changed, and follow it.
 * Let `git commit` run the hooks normally, and fix whatever they flag (lint errors, formatting, trailing whitespace, etc.) rather than working around them.
 * Never run `git commit --no-verify` (or otherwise bypass hooks) unless the user explicitly authorizes it for that specific commit.
 * If a hook modifies files (e.g. `ruff-format` reformatting code), re-stage the changed files and re-attempt the commit — do not assume the first attempt succeeded.
-* If pre-commit itself is not installed yet, tell the user rather than silently skipping the checks:
+* If the app has a config but pre-commit is not installed yet, tell the user rather than silently skipping the checks:
   ```bash
   pip install pre-commit
-  pre-commit install
+  cd apps/<app_name> && pre-commit install
   ```
+* If the app has no `.pre-commit-config.yaml`, run `ruff check` and `ruff format --check` on the changed Python files if `ruff` is available, and tell the user that the app has no hooks configured.
 
 ---
 

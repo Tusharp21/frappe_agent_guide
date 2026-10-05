@@ -401,4 +401,3 @@ When adding child-table behavior:
 Critical calculations should be validated server-side.
 
 ---
-

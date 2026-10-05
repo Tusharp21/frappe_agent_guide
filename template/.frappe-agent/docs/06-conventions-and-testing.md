@@ -89,7 +89,7 @@ class TestMyDoctype(FrappeTestCase):
         ...
 ```
 
-Linting and formatting (ruff, and the pre-commit hooks that run it) are covered in ["Pre-commit Hooks (Linting)"](../GIT_WORKFLOW.md#pre-commit-hooks-linting) in `GIT_WORKFLOW.md` — code must pass those hooks, not just tests.
+Linting and formatting (ruff, and the pre-commit hooks that run it) are covered in ["Pre-commit Hooks (Linting)"](../GIT_WORKFLOW.md#pre-commit-hooks-linting) in `GIT_WORKFLOW.md` — code must pass the app's own hooks, not just tests.
 
 ---
 
@@ -130,4 +130,3 @@ When changing existing fields or data:
 Never assume that adding a field automatically solves historical data requirements.
 
 ---
-

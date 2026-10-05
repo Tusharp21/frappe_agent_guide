@@ -5,7 +5,7 @@
 
 This document is the **project development source of truth**. It is intended to be used by Frappe/ERPNext developers, technical leads, AI coding agents (Claude Code, Codex, Gemini Code Assist, etc.), and developers maintaining custom Frappe applications.
 
-The full knowledge base is split into focused parts under [`docs/`](./docs/) so each topic stays easy to read, link to, and maintain. Read them in order the first time; afterwards, jump directly to the part you need.
+The full knowledge base is split into focused parts under [`docs/`](./docs/) so each topic stays easy to read, link to, and maintain. Use the routing table in [`docs/INDEX.md`](./docs/INDEX.md) to pick the part that matches your task; you do not need to read every part.
 
 ---
 
@@ -28,7 +28,7 @@ The full knowledge base is split into focused parts under [`docs/`](./docs/) so 
 
 ## Related Documents
 
-* [`AGENTS.md`](./AGENTS.md) — the core rulebook and process flow for the AI agent.
+* [`AGENTS.md`](../AGENTS.md) — the core rulebook and process flow for the AI agent.
 * [`GIT_WORKFLOW.md`](./GIT_WORKFLOW.md) — Git branching, commit, and safety rules.
 * [`workflow/`](./workflow/) — step-by-step Requirement Analysis, Implementation, and Review process.
 * [`templates/`](./templates/) — Markdown templates for documenting tasks.

@@ -13,12 +13,12 @@
 [How the system should work after the task is complete]
 
 ## Relevant DocTypes
-* 
-* 
+*
+*
 
 ## Relevant Files
-* 
-* 
+*
+*
 
 ## Existing Implementation
 [Notes on how similar things are done currently in the project]
