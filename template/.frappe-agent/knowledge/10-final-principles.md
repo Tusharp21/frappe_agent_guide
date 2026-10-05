@@ -67,12 +67,6 @@ because direct modifications increase upgrade and merge complexity.
 
 ---
 
-## Final AI Agent Checklist
-
-Before completing any Frappe development task, run back through ["AI Agent Rules — Do Not" and "AI Agent Rules — Must"](./07-ai-agent-guide.md) as a final self-check, alongside the process checklist in `workflow/REVIEW.md`.
-
----
-
 ## Project Development Golden Rule
 
 The most important rule for this project is:

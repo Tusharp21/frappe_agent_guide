@@ -12,7 +12,7 @@ Do **not** read every file in `knowledge/`. Pick the row that matches the task, 
 | Naming, file names, tests, validation, migration safety | [`06-conventions-and-testing.md`](./06-conventions-and-testing.md) |
 | Agent do's and don'ts, file placement rules | [`07-ai-agent-guide.md`](./07-ai-agent-guide.md) |
 | Worked examples (field, client behavior, validation, toggle, API, data migration) | [`08-examples-and-patterns.md`](./08-examples-and-patterns.md) |
-| Debugging, deployment checklist, change management | [`09-debugging-and-operations.md`](./09-debugging-and-operations.md) |
+| Debugging, change management (the deployment checklist is in `templates/DEPLOYMENT_PLAN.md`) | [`09-debugging-and-operations.md`](./09-debugging-and-operations.md) |
 | Final self-check before finishing any task | [`10-final-principles.md`](./10-final-principles.md) |
 
 ## Always read, regardless of task

@@ -111,12 +111,6 @@ unless there is a specific, understood reason.
 
 ---
 
-## Security Rules
-
-Before shipping, re-confirm the security rules from earlier chapters: security-sensitive functionality is implemented server-side, not trusted to hidden UI fields, disabled buttons, or client-side validation/permissions ("Whitelisted Methods" and "Permissions" in `knowledge/04-security-and-backend.md`); and secrets — passwords, tokens, API keys, integration credentials, sensitive business data — stay protected end-to-end ("Passwords and Secrets" in `knowledge/04-security-and-backend.md`).
-
----
-
 ## Documentation Rule
 
 New complex functionality should be documented.
@@ -161,37 +155,4 @@ External integration
 
 A feature is not considered complete until all required components are handled.
 
----
-
-## Deployment Checklist
-
-Before deployment:
-
-```text
-[ ] Code committed
-[ ] Git diff reviewed
-[ ] No secrets committed
-[ ] Customizations exported
-[ ] Fixtures updated if required
-[ ] Patches added if required
-[ ] Hooks verified
-[ ] Tests passed
-[ ] Migration requirements identified
-[ ] Build requirements identified
-[ ] Settings/configuration documented
-[ ] Error handling verified
-```
-
-After deployment:
-
-```text
-[ ] Migrate
-[ ] Clear cache if required
-[ ] Build assets if required
-[ ] Verify application
-[ ] Verify relevant Doctype
-[ ] Verify scheduled jobs
-[ ] Check Error Log
-```
-
----
+The deployment checklist and the deployment plan are in [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) (see `../workflow/DEPLOYMENT.md`).

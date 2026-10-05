@@ -1,59 +1,10 @@
-# Part 7 — AI Agent Guide: Git, Review & Workflow
+# Part 7 — Agent Rules & File Placement
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 
-## Git Rules
-
-Git workflow, branch naming, commit conventions, and safety rules (including which files must never be committed) are defined in [`GIT_WORKFLOW.md`](../workflow/GIT_WORKFLOW.md). That document is the single source of truth for all Git operations — follow it instead of duplicating its rules here.
-
----
-
-## Code Review Checklist
-
-The self-review checklist an AI agent must run after implementation is defined in [`workflow/REVIEW.md`](../workflow/REVIEW.md). That document is the single source of truth for post-implementation review — follow it instead of duplicating its checklist here.
-
----
-
-## AI Coding Agent Workflow
-
-The overall process — understanding the requirement, inspecting the system, and stopping for approval before coding — is defined in [`workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md). The steps below are the Frappe-specific technical checklist to apply *within* that process, not a replacement for it.
-
-### Step 1 — Understand the Requirement
-
-Identify:
-
-```text
-What is being changed?
-Which Doctype?
-Which module?
-Frontend or backend?
-New functionality or modification?
-Does data migration exist?
-Does configuration exist?
-```
-
----
-
-### Step 2 — Search Existing Code
-
-Before creating anything, search for:
-
-```text
-Doctype name
-field name
-function name
-API name
-existing hooks
-existing scripts
-existing Settings
-existing customizations
-```
-
----
-
-### Step 3 — Identify the Correct Extension Point
+## Choosing the Extension Point
 
 Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./05-business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `knowledge/02-doctype-development.md`).
 

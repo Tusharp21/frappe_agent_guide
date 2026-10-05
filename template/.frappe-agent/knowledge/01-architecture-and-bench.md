@@ -6,29 +6,7 @@ _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ## Purpose
 
-This document defines how Frappe/ERPNext development must be performed in this project.
-
-It is intended to be used by:
-
-- Frappe/ERPNext developers
-- Technical leads
-- AI coding agents such as Claude Code, Codex, Gemini Code Assist, etc.
-- Developers maintaining custom Frappe applications
-
-The goal is to keep the codebase:
-
-- Structured
-- Maintainable
-- Upgrade-friendly
-- Easy to understand
-- Easy to deploy
-- Easy to debug
-- Consistent across developers
-- Safe for AI-assisted development
-
-This document is the **project development source of truth**.
-
-When implementing a new feature or modifying existing functionality, the developer/AI agent must first understand and follow the conventions defined here.
+This knowledge base defines how Frappe/ERPNext development is done in this project, for developers and AI coding agents alike. The goal is a codebase that is structured, maintainable, upgrade-friendly, easy to deploy and debug, consistent across developers, and safe for AI-assisted development. It is the **project development source of truth**: understand and follow it before implementing or modifying anything.
 
 ---
 
