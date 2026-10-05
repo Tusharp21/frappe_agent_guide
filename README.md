@@ -12,7 +12,7 @@ your-bench/
 └── .frappe-agent/     # everything else
     ├── docs/          # knowledge base + INDEX.md routing table
     ├── workflow/      # TASK.md master workflow + step docs; BUG, CODE_REVIEW, DEPLOYMENT
-    ├── templates/     # TASK_RECORD.md (+ sections added step by step), DEPLOYMENT_PLAN.md
+    ├── templates/     # TASK_RECORD.md, DEPLOYMENT_PLAN.md
     ├── config.json    # workflow settings: approval mode, risk levels, history, production sites (yours; kept on update)
     ├── policy.json    # hook patterns: protected files, blocked/ask-first commands (yours; kept on update)
     ├── scripts/       # new_task.sh, task_state.sh, search_history.sh, inspect_app.sh, install_git_hooks.sh
@@ -77,7 +77,7 @@ UNDERSTAND -> CHECK EXISTING -> CLARIFY -> PROPOSE -> USER DECISION -> LOCK
 * **Ask at the start of every task.** The agent gives its understanding and asks whether to propose a solution and wait for your decision, or run automatically. Automatic is never offered for HIGH and never skips the permission rules. Configurable (`approval_mode`).
 * **Clarify, don't guess.** Ambiguous business points become short questions with options.
 * **Solution lock.** Once you decide, the solution is locked; the agent cannot change it silently and must come back to you if it has to.
-* **Task states** (`DRAFT` to `COMPLETED`, plus `BLOCKED`) are tracked by `scripts/task_state.sh`, which rejects out-of-order moves and requires the agent to quote your words when locking or completing.
+* **Six task states** (`DRAFT`, `LOCKED`, `IN_PROGRESS`, `WAITING_FOR_APPROVAL`, `COMPLETED`, `BLOCKED`) are tracked by `scripts/task_state.sh`, which rejects out-of-order moves and requires the agent to quote your words when locking or completing. This is friction, not a guarantee: an agent can still write a note itself or use `--force`.
 * **History as memory.** Each MEDIUM/HIGH task is one local file with a short card on top; `scripts/search_history.sh <keywords>` shows only the cards of matching past tasks, plus decisions and git history, so the agent checks existing work cheaply before building.
 * **Other workflows:** `BUG.md` (reproduce, diagnose, fix, regression test), `CODE_REVIEW.md`, `DEPLOYMENT.md`.
 
@@ -119,7 +119,7 @@ The agent reads only what a step needs, not the whole knowledge base:
 * `AGENTS.md` (always loaded) has a short LOW-task path, so a typo fix never reads the task workflow.
 * `docs/INDEX.md` routes to one doc, and `scripts/doc_sections.sh <NN>` lists its headings with line ranges so only one section is read.
 * `GIT_WORKFLOW.md` holds the rules; examples and templates are in `GIT_REFERENCE.md`, read only when needed.
-* The task record starts as a short card; `scripts/task_section.sh` appends each section's format only when that step is reached, and `scripts/search_history.sh` shows future tasks just the card.
+* The task record has a short card on top, and `scripts/search_history.sh` shows future tasks just the card.
 * `config.json` is small (what the agent reads); the regex patterns for hooks are in `policy.json`.
 * `scripts/inspect_app.sh` caps long lists (use `--filter` or `--all`).
 

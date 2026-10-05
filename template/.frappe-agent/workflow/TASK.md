@@ -29,25 +29,34 @@ Use the interactive question tool if you have one, else ask in plain text and wa
 
 ## States
 
-Set with `../scripts/task_state.sh <id> <STATE> [--note "..."]`, which validates the order and logs it.
+Set with `../scripts/task_state.sh <id> <STATE> [--note "..."]`, which validates the order and logs it. Six states; the steps below happen *within* them.
 
-`DRAFT` (created) -> `UNDERSTANDING` -> `CLARIFICATION` (waiting for answers) -> `SOLUTION_PROPOSED` -> `WAITING_FOR_DECISION` -> `LOCKED` (user approved a final solution) -> `IN_PROGRESS` -> `TESTING` -> `REVIEW` -> `WAITING_FOR_APPROVAL` -> `COMPLETED`. `BLOCKED` can be entered from any state (say what is needed).
+| State | Meaning | Steps |
+| ----- | ------- | ----- |
+| `DRAFT` | Open: understanding, questions, proposal; the solution is not locked | 1 to 4 |
+| `LOCKED` | The user approved a final solution (`--note` quotes them) | 5 |
+| `IN_PROGRESS` | Executing, testing and reviewing | 6 to 9 |
+| `WAITING_FOR_APPROVAL` | Summary given; waiting for the user | 10 |
+| `COMPLETED` | Approved and done (`--note` quotes them) | 11 |
+| `BLOCKED` | Stopped by a dependency or problem; say what is needed | any |
+
+If a locked solution must change, move back to `DRAFT` and get a new decision.
 
 ## Steps
 
-Records are created for the risk levels in `history.record_for`. For each step, run `../scripts/task_section.sh <id> <name>`: it appends that section's format to the record and prints it; fill it in. Do this when you reach the step, not before.
+Records are created for the risk levels in `history.record_for`. Fill the matching section of the record as you reach each step, and delete sections that do not apply.
 
-1. **Create.** `../scripts/new_task.sh "<title>" <low|medium|high>`; fill the requirement block in the record. Do not start coding. Move to `UNDERSTANDING`.
-2. **Understand and check existing work** (`understanding`). Never build what already exists. Run `../scripts/search_history.sh <keywords>` and `../scripts/inspect_app.sh <app>`, read `../project_knowledge/APP_MAP.md`, search the code for existing implementations and patterns. Decide: reuse, extend, or new.
-3. **Clarify** (`clarification`, once per question). If anything important is ambiguous, do not code and do not guess a business decision: move to `CLARIFICATION` and ask short, specific questions, one at a time, each with why it matters and options. Record the answer in the user's words.
-4. **Propose** (`proposal`). Move to `SOLUTION_PROPOSED`, then `WAITING_FOR_DECISION`. Include acceptance criteria; HIGH adds a rollback plan and migration-impact note. Give a recommendation, not just options.
-5. **Decide and lock** (`decision`). Record the user's decision, then `../scripts/task_state.sh <id> LOCKED --note "<what the user said>"`. Never lock on your own. **A locked solution is never changed silently**: if it must change materially, stop, move to `WAITING_FOR_DECISION`, explain, and get a new decision.
-6. **Execute** (`execution`). Move to `IN_PROGRESS`; follow [`IMPLEMENTATION.md`](./IMPLEMENTATION.md): stay inside the locked solution and scope, no unrelated refactors, no new dependencies without approval.
-7. **Test and verify** (`testing`). Move to `TESTING`. If the decision was YES run the real checks in [`REVIEW.md`](./REVIEW.md); if NO record the reason and still lint. Report real results; "tests should pass" is not evidence.
-8. **Review** (`review`). Move to `REVIEW`. Review the diff; for MEDIUM and HIGH use a separate read-only reviewer (for example a subagent). Fix findings and re-run the checks.
-9. **Summary and audit** (`summary`, `audit`; HIGH also `rollback`). Fill what was done, files (`git diff --stat`), real test output, problems, limitations, risk, branch, commit, and each acceptance criterion met / not met / not verified.
-10. **Approval.** Move to `WAITING_FOR_APPROVAL` and present the summary. Only on the user's approval run `../scripts/task_state.sh <id> COMPLETED --note "<what the user said>"`. Changes requested: back to `IN_PROGRESS` (or `WAITING_FOR_DECISION` if the solution changes).
-11. **Update history** (`lessons`). Update the card at the top of the record (decision, locked solution, files, tests, approval, commit). Add lasting facts to `../project_knowledge/APP_MAP.md` and decisions to `DECISIONS.md`. If a mistake repeated, propose a rule, test or checklist item.
+1. **Create.** `../scripts/new_task.sh "<title>" <low|medium|high>`; fill the Requirement block. Do not start coding.
+2. **Understand and check existing work.** Never build what already exists. Run `../scripts/search_history.sh <keywords>` and `../scripts/inspect_app.sh <app>`, read `../project_knowledge/APP_MAP.md`, search the code for existing implementations and patterns. Decide: reuse, extend, or new. (Section: Understanding.)
+3. **Clarify.** If anything important is ambiguous, do not code and do not guess a business decision: ask short, specific questions, one at a time, each with why it matters and options. Record each answer in the user's words. (Section: Clarification.)
+4. **Propose.** Give the solution with acceptance criteria; HIGH adds a rollback plan and migration-impact note. Give a recommendation, not just options. (Section: Solution proposal.)
+5. **Decide and lock.** Record the user's decision, then `../scripts/task_state.sh <id> LOCKED --note "<what the user said>"`. Never lock on your own. **A locked solution is never changed silently**: if it must change materially, stop, move back to `DRAFT`, explain, and get a new decision. (Section: Decision and lock.)
+6. **Execute.** `IN_PROGRESS`; follow [`IMPLEMENTATION.md`](./IMPLEMENTATION.md): stay inside the locked solution and scope, no unrelated refactors, no new dependencies without approval. (Section: Execution log.)
+7. **Test and verify.** If the decision was YES run the real checks in [`REVIEW.md`](./REVIEW.md); if NO record the reason and still lint. Report real results; "tests should pass" is not evidence. (Section: Testing report.)
+8. **Review.** Review the diff; for MEDIUM and HIGH use a separate read-only reviewer (for example a subagent). Fix findings and re-run the checks. (Section: Review.)
+9. **Summary and audit.** Fill what was done, files (`git diff --stat`), real test output, problems, limitations, risk, branch, commit, and each acceptance criterion met / not met / not verified (HIGH also the rollback plan). (Sections: Final summary, Audit evidence, Rollback plan.)
+10. **Approval.** `WAITING_FOR_APPROVAL`; present the summary. Only on the user's approval run `../scripts/task_state.sh <id> COMPLETED --note "<what the user said>"`. Changes requested: back to `IN_PROGRESS` (or `DRAFT` if the solution changes).
+11. **Update history.** Update the card at the top of the record (decision, locked solution, files, tests, approval, commit). Add lasting facts to `../project_knowledge/APP_MAP.md` and decisions to `DECISIONS.md`. If a mistake repeated, propose a rule, test or checklist item. (Section: Lessons.)
 
 You never deploy. If the change must reach production, write the plan per [`DEPLOYMENT.md`](./DEPLOYMENT.md) and hand it to the user. COMPLETED means development is approved; update the card's `Deployment` field when the human reports the result.
 

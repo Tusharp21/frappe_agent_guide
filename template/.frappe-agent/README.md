@@ -18,7 +18,7 @@ Rulebook and knowledge base for AI coding agents (Claude Code, Cursor, GitHub Co
 | `policy.json` | Patterns the hooks enforce: protected files, blocked and ask-first commands, command log |
 | `CONFIGURATION.md` | How to configure and use all of this in a project |
 | `workflow/PERMISSIONS_AND_PRODUCTION.md` | Risk policy, read-only production, secrets |
-| `scripts/` | `new_task.sh`, `task_state.sh`, `task_section.sh`, `search_history.sh`, `inspect_app.sh`, `doc_sections.sh`, `install_git_hooks.sh` |
+| `scripts/` | `new_task.sh`, `task_state.sh`, `search_history.sh`, `inspect_app.sh`, `doc_sections.sh`, `install_git_hooks.sh` |
 | `hooks/`, `adapters/` | Enforcement hooks and agent settings (used only with `--with-*-hooks`) |
 | `tasks/` | Local task records, one file per task (created on first use; git-ignored; location set by `history.path`) |
 | `audit/` | Local command log (created on first use; git-ignored) |

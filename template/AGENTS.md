@@ -11,7 +11,7 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 * Git rules: `.frappe-agent/GIT_WORKFLOW.md` (examples only in `GIT_REFERENCE.md`)
 * Permissions, production, secrets: `.frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md`
 * Settings: `.frappe-agent/config.json` (small; read it each task)
-* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `task_section.sh`, `search_history.sh`, `inspect_app.sh`)
+* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `search_history.sh`, `inspect_app.sh`)
 * Project knowledge: `.frappe-agent/project_knowledge/` (`APP_MAP.md`, `DECISIONS.md`)
 
 ## LOW tasks (text, label, typo, styling; no logic, permission, schema or data impact)
