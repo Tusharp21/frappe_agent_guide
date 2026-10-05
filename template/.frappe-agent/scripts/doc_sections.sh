@@ -12,7 +12,7 @@
 set -euo pipefail
 
 FA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DOCS="$FA_DIR/docs"
+DOCS="$FA_DIR/knowledge"
 
 if [ $# -eq 0 ]; then
   for f in "$DOCS"/[0-9]*.md; do

@@ -11,7 +11,7 @@ Step 6 of the [`TASK.md`](./TASK.md) workflow. This phase begins ONLY after the 
 * **Backend:** Write Python logic, updating controllers or hooks. Ensure clear separation of concerns.
 * **Frontend:** Write JS for client scripts or Vue/JS components if required.
 * **Database:** Apply schema changes via doctype JSON modifications, custom fields, or fixtures.
-* Follow the project rules and the relevant part of `../docs/` (see `../docs/INDEX.md`).
+* Follow the project rules and the relevant part of `../knowledge/` (see `../knowledge/INDEX.md`).
 
 ## 3. Error Handling and Edge Cases
 * Handle all exceptions gracefully using standard Frappe error handling (`frappe.throw`, `frappe.msgprint`).

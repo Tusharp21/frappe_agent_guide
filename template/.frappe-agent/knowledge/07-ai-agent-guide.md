@@ -1,12 +1,12 @@
 # Part 7 — AI Agent Guide: Git, Review & Workflow
 
-_Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
+_Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 
 ## Git Rules
 
-Git workflow, branch naming, commit conventions, and safety rules (including which files must never be committed) are defined in [`GIT_WORKFLOW.md`](../GIT_WORKFLOW.md). That document is the single source of truth for all Git operations — follow it instead of duplicating its rules here.
+Git workflow, branch naming, commit conventions, and safety rules (including which files must never be committed) are defined in [`GIT_WORKFLOW.md`](../workflow/GIT_WORKFLOW.md). That document is the single source of truth for all Git operations — follow it instead of duplicating its rules here.
 
 ---
 
@@ -55,7 +55,7 @@ existing customizations
 
 ### Step 3 — Identify the Correct Extension Point
 
-Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./05-business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `docs/02-doctype-development.md`).
+Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./05-business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `knowledge/02-doctype-development.md`).
 
 ---
 

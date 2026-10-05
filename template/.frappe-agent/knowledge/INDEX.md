@@ -1,6 +1,6 @@
 # Docs Routing Index
 
-Do **not** read every file in `docs/`. Pick the row that matches the task, then run `../scripts/doc_sections.sh <NN>` (for example `02`) to list that doc's headings with line ranges and read only the section you need. Follow its links when it points elsewhere. The full table of contents is in [`FRAPPE_DEVELOPMENT.md`](../FRAPPE_DEVELOPMENT.md).
+Do **not** read every file in `knowledge/`. Pick the row that matches the task, then run `../scripts/doc_sections.sh <NN>` (for example `02`) to list that doc's headings with line ranges and read only the section you need. Follow its links when it points elsewhere.
 
 | If the task involves... | Read |
 | ----------------------- | ---- |
@@ -19,7 +19,7 @@ Do **not** read every file in `docs/`. Pick the row that matches the task, then 
 
 * [`../workflow/TASK.md`](../workflow/TASK.md): the task workflow (states, formats, risk levels). Use `BUG.md` for bugs, `CODE_REVIEW.md` to review a diff, `DEPLOYMENT.md` for production.
 * [`../workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md) before proposing a solution.
-* [`../GIT_WORKFLOW.md`](../GIT_WORKFLOW.md) before any Git operation.
+* [`../workflow/GIT_WORKFLOW.md`](../workflow/GIT_WORKFLOW.md) before any Git operation.
 * [`../workflow/PERMISSIONS_AND_PRODUCTION.md`](../workflow/PERMISSIONS_AND_PRODUCTION.md) before running any command that installs, migrates, deletes, pushes, or touches an environment.
-* [`../config.json`](../config.json) for approval mode, audit, and production settings (guide: [`../CONFIGURATION.md`](../CONFIGURATION.md)).
+* [`../config.json`](../config.json) for approval mode, risk levels, history and production settings.
 * [`../project_knowledge/APP_MAP.md`](../project_knowledge/APP_MAP.md) to see what is already known about this bench, and `../scripts/search_history.sh <keywords>` for past tasks.

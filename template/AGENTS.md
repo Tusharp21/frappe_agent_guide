@@ -6,9 +6,9 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 ## Where things are
 
 * **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
-* Standards: `.frappe-agent/docs/INDEX.md` (routing table), then `scripts/doc_sections.sh <NN>` to read just one section.
+* Standards: `.frappe-agent/knowledge/INDEX.md` (routing table), then `scripts/doc_sections.sh <NN>` to read just one section.
 * Step details: `.frappe-agent/workflow/` (`REQUIREMENT_ANALYSIS.md`, `IMPLEMENTATION.md`, `REVIEW.md`)
-* Git rules: `.frappe-agent/GIT_WORKFLOW.md` (examples only in `GIT_REFERENCE.md`)
+* Git rules: `.frappe-agent/workflow/GIT_WORKFLOW.md` (examples only in `workflow/GIT_REFERENCE.md`)
 * Permissions, production, secrets: `.frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md`
 * Settings: `.frappe-agent/config.json` (small; read it each task)
 * Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `search_history.sh`, `inspect_app.sh`)
@@ -39,7 +39,7 @@ Follow `.frappe-agent/workflow/TASK.md`:
 * **Production is read-only for you.** Never run anything against a production site or host (see `config.json`). Write a deployment plan (`workflow/DEPLOYMENT.md`) and let the human run it.
 * Never read, print or edit secrets (`.env`, `site_config.json`, keys). Never run prohibited actions (destructive SQL, `bench drop-site`, force-push). Ask first for ask-first ones (installs, migrate, deletes, network, push). See the permissions file.
 * Report only real results: never claim tests passed unless you ran them and have the output.
-* Git: follow `.frappe-agent/GIT_WORKFLOW.md`. Git repositories are the apps under `apps/`, not the bench root. Never push to `main`/`master`; work on a dedicated branch and open a Pull Request. Stop and ask on conflicts or authentication problems.
+* Git: follow `.frappe-agent/workflow/GIT_WORKFLOW.md`. Git repositories are the apps under `apps/`, not the bench root. Never push to `main`/`master`; work on a dedicated branch and open a Pull Request. Stop and ask on conflicts or authentication problems.
 
 ## Keep context small
 

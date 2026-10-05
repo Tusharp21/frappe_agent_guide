@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Claude Code PreToolUse hook. Enforces .frappe-agent/policy.json, config.json and the rules
-# in GIT_WORKFLOW.md and workflow/PERMISSIONS_AND_PRODUCTION.md:
+# in workflow/GIT_WORKFLOW.md and workflow/PERMISSIONS_AND_PRODUCTION.md:
 #   * blocks forbidden git commands (push to main/master, force-push,
 #     --no-verify, reset --hard, clean, branch -D, --ours/--theirs)
 #   * blocks any command that targets a production site or host
@@ -67,7 +67,7 @@ if not tool:
         dialect, tool, ti = "cursor", "Read", {"file_path": data.get("file_path") or data.get("path") or ""}
 cwd = data.get("cwd") or os.getcwd()
 
-DOC = "See .frappe-agent/GIT_WORKFLOW.md and .frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md."
+DOC = "See .frappe-agent/workflow/GIT_WORKFLOW.md and .frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md."
 
 
 def decision(kind, reason):

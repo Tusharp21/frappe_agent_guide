@@ -1,6 +1,6 @@
 # Part 3 — App Structure & Config Files
 
-_Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
+_Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 

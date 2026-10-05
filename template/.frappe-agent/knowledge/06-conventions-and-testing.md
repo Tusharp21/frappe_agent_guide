@@ -1,6 +1,6 @@
 # Part 6 — Conventions, Testing & Migration Safety
 
-_Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
+_Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 
@@ -89,7 +89,7 @@ class TestMyDoctype(FrappeTestCase):
         ...
 ```
 
-Linting and formatting (ruff, and the pre-commit hooks that run it) are covered in ["Pre-commit Hooks (Linting)"](../GIT_WORKFLOW.md#pre-commit-hooks-linting) in `GIT_WORKFLOW.md` — code must pass the app's own hooks, not just tests.
+Linting and formatting (ruff, and the pre-commit hooks that run it) are covered in ["Pre-commit Hooks (Linting)"](../workflow/GIT_WORKFLOW.md#pre-commit-hooks-linting) in `GIT_WORKFLOW.md` — code must pass the app's own hooks, not just tests.
 
 ---
 

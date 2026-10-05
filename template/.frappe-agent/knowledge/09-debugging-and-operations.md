@@ -1,6 +1,6 @@
 # Part 9 — Debugging & Operations
 
-_Part of [FRAPPE_DEVELOPMENT.md](../FRAPPE_DEVELOPMENT.md) — the Frappe Development Knowledge Base index._
+_Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ---
 
@@ -113,7 +113,7 @@ unless there is a specific, understood reason.
 
 ## Security Rules
 
-Before shipping, re-confirm the security rules from earlier chapters: security-sensitive functionality is implemented server-side, not trusted to hidden UI fields, disabled buttons, or client-side validation/permissions ("Whitelisted Methods" and "Permissions" in `docs/04-security-and-backend.md`); and secrets — passwords, tokens, API keys, integration credentials, sensitive business data — stay protected end-to-end ("Passwords and Secrets" in `docs/04-security-and-backend.md`).
+Before shipping, re-confirm the security rules from earlier chapters: security-sensitive functionality is implemented server-side, not trusted to hidden UI fields, disabled buttons, or client-side validation/permissions ("Whitelisted Methods" and "Permissions" in `knowledge/04-security-and-backend.md`); and secrets — passwords, tokens, API keys, integration credentials, sensitive business data — stay protected end-to-end ("Passwords and Secrets" in `knowledge/04-security-and-backend.md`).
 
 ---
 

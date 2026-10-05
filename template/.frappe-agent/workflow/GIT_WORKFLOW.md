@@ -16,7 +16,7 @@ This template is usually installed in the **bench root** (the folder containing 
 
 Before **any Git or GitHub operation**, the agent must know whether the repository is a **Personal Project** or an **Office Project**, and must not assume.
 
-* If the type is explicitly known from the project configuration or an established project rule (for example recorded under the app in [`project_knowledge/APP_MAP.md`](./project_knowledge/APP_MAP.md)), proceed without asking again.
+* If the type is explicitly known from the project configuration or an established project rule (for example recorded under the app in [`project_knowledge/APP_MAP.md`](../project_knowledge/APP_MAP.md)), proceed without asking again.
 * If unknown, stop and ask: *"Before I start Git/GitHub operations, please confirm: 1. Personal Project, 2. Office Project."* Once answered, record it in `APP_MAP.md` so it is known next time.
 * Before Git operations, always verify the local identity (`git config --local user.name` and `user.email`) matches the project type. Set it with `git config --local` if needed (commands in the reference).
 

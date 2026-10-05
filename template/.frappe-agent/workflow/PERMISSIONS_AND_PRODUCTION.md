@@ -1,6 +1,6 @@
 # Permissions, Production and Secrets
 
-Every action the agent can perform has a policy: allowed automatically, needs approval, or prohibited. The thresholds below are the defaults; the patterns that hooks enforce are in [`../policy.json`](../policy.json) and the production sites in [`../config.json`](../config.json) (humans: see [`../CONFIGURATION.md`](../CONFIGURATION.md)).
+Every action the agent can perform has a policy: allowed automatically, needs approval, or prohibited. The thresholds below are the defaults; the patterns that hooks enforce are in [`../policy.json`](../policy.json) and the production sites in [`../config.json`](../config.json).
 
 ## Action levels
 
