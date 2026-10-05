@@ -1,2 +1,3 @@
-# Local audit trail and command log: never commit these.
+# Local task records, audit trail and command log: never commit these.
 audit/
+tasks/

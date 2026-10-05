@@ -2,15 +2,17 @@
 
 Every action the agent can perform has a policy: allowed automatically, needs approval, or prohibited. The thresholds below are the defaults; the patterns that hooks enforce are in [`../config.json`](../config.json) (see [`../CONFIGURATION.md`](../CONFIGURATION.md)).
 
-## Risk policy
+## Action levels
 
-| Risk | Examples | Policy |
-| ---- | -------- | ------ |
-| **Low** | Read files, search, edit app code, format/lint, run tests on a dev site, `git status/diff/log`, create a branch, `git add`/`git commit` on a dedicated branch | Automatic |
-| **Medium** | Install a dependency (`pip`, `npm`, `bench get-app`), `bench migrate`/`build`/`update`/`restore`/`execute`/`console`/`set-config`, delete files, network access (`curl`, `wget`), `git push` of a dedicated branch, `sudo`, restarting services | Ask the user first, every time |
-| **High** | Anything on production; destructive SQL (`DROP`, `TRUNCATE`, `DELETE` without `WHERE`); `bench drop-site`/`reinstall`/`uninstall-app`; credentials or secrets; firewall/DNS; force-push; deleting branches; push to `main`/`master` | **Prohibited for the agent.** A human runs it. Stop and tell the user |
+Every command or action has an **action level**. This is separate from a *task's* risk level (LOW/MEDIUM/HIGH in [`TASK.md`](./TASK.md)): a LOW task can still contain an ask-first action, and a HIGH task can be mostly automatic ones.
 
-Approval for one action does not extend to the next. Choosing "auto" mode at the start of a task (see [`REQUIREMENT_ANALYSIS.md`](./REQUIREMENT_ANALYSIS.md)) skips plan approval only; it never skips these policies.
+| Action level | Examples | Policy |
+| ------------ | -------- | ------ |
+| **Automatic** | Read files, search, edit app code, format/lint, run tests on a dev site, `git status/diff/log`, create a branch, `git add`/`git commit` on a dedicated branch | Automatic |
+| **Ask first** | Install a dependency (`pip`, `npm`, `bench get-app`), `bench migrate`/`build`/`update`/`restore`/`execute`/`console`/`set-config`, delete files, network access (`curl`, `wget`), `git push` of a dedicated branch, `sudo`, restarting services | Ask the user first, every time |
+| **Prohibited** | Anything on production; destructive SQL (`DROP`, `TRUNCATE`, `DELETE` without `WHERE`); `bench drop-site`/`reinstall`/`uninstall-app`; credentials or secrets; firewall/DNS; force-push; deleting branches; push to `main`/`master` | **Prohibited for the agent.** A human runs it. Stop and tell the user |
+
+Approval for one action does not extend to the next. Choosing automatic mode at the start of a task (see [`TASK.md`](./TASK.md)) skips the wait for the user's decision only; it never skips these policies.
 
 ## Production: the agent is read-only
 
@@ -18,7 +20,7 @@ The agent never executes anything against production. Not even harmless-looking 
 
 What the agent does instead:
 
-1. Write a deployment plan with [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md): changes, migrations, dependencies, config changes, risk, backup requirement, validation steps, rollback steps, post-deployment checks, and the human approvals required.
+1. Write a deployment plan with [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) (see [`DEPLOYMENT.md`](./DEPLOYMENT.md)): changes, migrations, dependencies, config changes, risk, backup requirement, validation steps, rollback steps, post-deployment checks, and the human approvals required.
 2. Hand the plan to the user. The user runs every step.
 3. If the plan needs information from production, ask the user to run a command and paste the output (after removing secrets).
 
@@ -35,4 +37,4 @@ Expected path for a change: development, then a test/staging site, then human QA
 
 ## Destructive operations on a dev site
 
-Dropping or truncating data, even on a dev site, is High risk: stop and ask. Prefer a backup (`bench --site <site> backup`, which needs approval) before any migration or data change you are asked to run.
+Dropping or truncating data, even on a dev site, is a prohibited action: stop and ask. Prefer a backup (`bench --site <site> backup`, which needs approval) before any migration or data change you are asked to run.

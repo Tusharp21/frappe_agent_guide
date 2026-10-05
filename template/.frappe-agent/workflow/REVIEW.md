@@ -1,6 +1,6 @@
-# Code Review & Quality Assurance
+# Test, Review and Report
 
-After implementation is complete, the AI must self-review the code against this checklist before considering the task done.
+Steps 7 to 9 of the [`TASK.md`](./TASK.md) workflow. After implementation, test and review the work against this checklist before reporting it as done.
 
 ## 1. Functional Review
 - [ ] Does the code fulfill the original requirement?
@@ -30,21 +30,22 @@ After implementation is complete, the AI must self-review the code against this 
 
 ## 6. Verification Commands
 
-Run these for real and report the actual results. Run them from the bench root; use the site and app names from the task. If a command cannot be run (no site available, missing permissions), say so rather than skipping silently.
+Run these for real and report the actual results. Run them from the bench root; use the site and app names from the task. If a command cannot be run (no site available, missing permissions), say so rather than skipping silently. If the test decision was NO, record the reason and still run the linter. **HIGH tasks may not skip tests.**
 
-| Tier | Run |
+| Risk | Run |
 | ---- | --- |
-| Trivial | The app's linter on the changed file (see the pre-commit item above). |
-| Standard | Linter, plus the tests for the touched DocType/module: `bench --site <site> run-tests --app <app> --module <dotted.module.path>` (or `--doctype "<DocType>"`). |
-| Major | Everything for Standard, plus: run `bench --site <site> migrate` on a **test site or backup copy only** (never production) when a patch, fixture, or schema change is involved, and confirm the patch is listed in `patches.txt` and fixtures are exported. |
+| LOW | The app's linter on the changed file (see the pre-commit item above). |
+| MEDIUM | Linter, plus the tests for the touched DocType/module: `bench --site <site> run-tests --app <app> --module <dotted.module.path>` (or `--doctype "<DocType>"`). |
+| HIGH | Everything for MEDIUM, plus: run `bench --site <site> migrate` on a **test site or backup copy only** (never production) when a patch, fixture, or schema change is involved, and confirm the patch is listed in `patches.txt` and fixtures are exported. |
 
-For Standard and Major tasks, review the final `git diff` with a separate read-only reviewer (for example a subagent) rather than relying only on this self-review.
+For MEDIUM and HIGH, review the final `git diff` with a separate read-only reviewer (for example a subagent) rather than relying only on this self-review.
 
-## 7. Final Report and Audit Record
+## 7. Final Report and Record
 
 Evidence matters more than the word "done". Never write that tests passed unless you ran them and have the output.
 
-* If the task's tier is listed in `audit.tiers` in [`../config.json`](../config.json), create the record with `../scripts/new_run.sh "<task title>" <tier>` and fill in [`../templates/RUN_REPORT.md`](../templates/RUN_REPORT.md): requirement, acceptance criteria (met / not met / not verified), files changed (`git diff --stat`), commands executed, **actual** test output (or "NOT RUN" and why), review findings, remaining risks, branch, commit ID, and the rollback plan for Major tasks.
-* For tiers without a record, give the user a short report: what changed, files changed, commands run, test results, risks, branch and commit.
+* Fill the final summary and audit evidence in the task record (`../templates/TASK_RECORD.md`): what was done, files changed (`git diff --stat`), **actual** test output (or "NOT RUN" and why), review findings, problems, limitations, risk, branch, commit ID, each acceptance criterion marked met / not met / not verified, and the rollback plan for HIGH tasks.
+* LOW tasks without a record: give the user a short report: what changed, files changed, commands run, test results, risks, branch and commit.
 * Do not mark the work done while any acceptance criterion is unverified without saying so.
-* If the change must reach production, write a deployment plan with [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) and hand it to the user. Do not deploy.
+* If the change must reach production, write a deployment plan (see `DEPLOYMENT.md`) and hand it to the user. Do not deploy.
+* Update the card, `project_knowledge/` and any lessons (step 11 of `TASK.md`).

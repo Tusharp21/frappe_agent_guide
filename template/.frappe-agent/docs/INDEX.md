@@ -17,8 +17,9 @@ Do **not** read every file in `docs/`. Pick the row that matches the task, read 
 
 ## Always read, regardless of task
 
-* [`../workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md) before planning.
+* [`../workflow/TASK.md`](../workflow/TASK.md): the task workflow (states, formats, risk levels). Use `BUG.md` for bugs, `CODE_REVIEW.md` to review a diff, `DEPLOYMENT.md` for production.
+* [`../workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md) before proposing a solution.
 * [`../GIT_WORKFLOW.md`](../GIT_WORKFLOW.md) before any Git operation.
 * [`../workflow/PERMISSIONS_AND_PRODUCTION.md`](../workflow/PERMISSIONS_AND_PRODUCTION.md) before running any command that installs, migrates, deletes, pushes, or touches an environment.
 * [`../config.json`](../config.json) for approval mode, audit, and production settings (guide: [`../CONFIGURATION.md`](../CONFIGURATION.md)).
-* [`../project_knowledge/APP_MAP.md`](../project_knowledge/APP_MAP.md) to see what is already known about this bench.
+* [`../project_knowledge/APP_MAP.md`](../project_knowledge/APP_MAP.md) to see what is already known about this bench, and `../scripts/search_history.sh <keywords>` for past tasks.

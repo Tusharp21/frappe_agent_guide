@@ -91,7 +91,7 @@ def block(reason):
 
 
 def ask(reason):
-    decision("ask", "(Medium risk) " + reason)
+    decision("ask", "(ask-first action) " + reason)
     sys.exit(0)
 
 
@@ -197,7 +197,7 @@ for pat in cfg.get("blocked_commands") or []:
     except re.error:
         continue
     if m:
-        block("'%s' matches a blocked (High risk) pattern; it requires a human to run it" % m.group(0).strip())
+        block("'%s' is a prohibited action; it requires a human to run it" % m.group(0).strip())
 
 SAFE_FOR_PROTECTED = {"ls", "test", "[", "stat"}
 for part in re.split(r"&&|\|\||[;|\n]", cmd):

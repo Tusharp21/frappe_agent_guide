@@ -1,16 +1,34 @@
 {
   "approval_mode": "ask_each_task",
-  "auto_mode_allowed_tiers": ["trivial", "standard"],
+  "auto_mode_allowed_risk": [
+    "low",
+    "medium"
+  ],
+  "final_approval_required_for": [
+    "medium",
+    "high"
+  ],
+  "history": {
+    "enabled": true,
+    "path": "tasks",
+    "record_for": [
+      "medium",
+      "high"
+    ]
+  },
   "audit": {
     "enabled": true,
-    "tiers": ["standard", "major"],
     "log_commands": true
   },
   "environments": {
     "production": {
       "sites": [],
       "hosts": [],
-      "name_words": ["prod", "production", "live"]
+      "name_words": [
+        "prod",
+        "production",
+        "live"
+      ]
     }
   },
   "protected_files": [
