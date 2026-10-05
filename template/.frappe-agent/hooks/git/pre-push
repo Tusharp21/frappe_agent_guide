@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# frappe-agent pre-push
+#
+# Git-level safety net that works for every AI agent (and humans), because it
+# runs inside Git rather than inside an agent. Blocks:
+#   * pushing to or deleting main/master
+#   * non-fast-forward (force) pushes
+# Installed per app repository by .frappe-agent/scripts/install_git_hooks.sh.
+# A human who really needs to push can use `git push --no-verify`.
+
+zero="0000000000000000000000000000000000000000"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/master)
+      echo "frappe-agent: direct push to ${remote_ref#refs/heads/} is blocked. Push a dedicated branch and open a Pull Request." >&2
+      exit 1
+      ;;
+  esac
+  if [ "$local_sha" = "$zero" ]; then
+    echo "frappe-agent: deleting remote branch ${remote_ref#refs/heads/} is blocked. Ask the user." >&2
+    exit 1
+  fi
+  if [ "$remote_sha" != "$zero" ] && ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+    echo "frappe-agent: non-fast-forward (force) push to ${remote_ref#refs/heads/} is blocked. Ask the user." >&2
+    exit 1
+  fi
+done
+exit 0

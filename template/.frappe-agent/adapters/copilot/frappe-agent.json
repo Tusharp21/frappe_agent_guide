@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      { "type": "command", "bash": "bash .frappe-agent/hooks/guard.sh", "timeoutSec": 15 }
+    ],
+    "postToolUse": [
+      { "type": "command", "bash": "bash .frappe-agent/hooks/audit_log.sh", "timeoutSec": 15 }
+    ]
+  }
+}

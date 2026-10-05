@@ -1,0 +1,14 @@
+# frappe-agent:start
+# Keep secrets out of the agent's context. Note: .cursorignore does not stop
+# terminal commands; the Cursor hook (.cursor/hooks.json) covers those.
+.env
+.env.*
+!.env.example
+!.env.sample
+**/site_config.json
+**/common_site_config.json
+*.pem
+*.key
+*.p12
+*.pfx
+# frappe-agent:end
