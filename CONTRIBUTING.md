@@ -28,7 +28,7 @@ For anything beyond a typo fix, open an issue first describing the problem or ga
    bash uninstall.sh --dir /tmp/template-test --yes
    ```
 3. If you change any Markdown file, check that internal links still resolve (relative paths, not absolute) and that code fences are balanced.
-4. Keep documentation changes and tooling changes (`install.sh`, `uninstall.sh`, `.pre-commit-config.yaml`) in separate commits where practical, so history stays easy to review.
+4. Keep documentation changes and tooling changes (`install.sh`, `uninstall.sh`) in separate commits where practical, so history stays easy to review.
 
 ## Opening a pull request
 

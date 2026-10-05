@@ -7,7 +7,7 @@
 - [ ] Documentation fix (typo, grammar, broken link)
 - [ ] Documentation content (new rule, clarified rule, new example)
 - [ ] De-duplication / reorganization (moved or merged existing content)
-- [ ] Tooling (`install.sh`, `uninstall.sh`, `.pre-commit-config.yaml`, CI)
+- [ ] Tooling (`install.sh`, `uninstall.sh`, CI)
 - [ ] Other (describe above)
 
 ## Single source of truth
