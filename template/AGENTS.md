@@ -6,7 +6,7 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 ## Where things are
 
 * **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
-* Standards: `.frappe-agent/knowledge/INDEX.md` (routing table), then `scripts/doc_sections.sh <NN>` to read just one section.
+* Standards: `.frappe-agent/knowledge/INDEX.md` (routing table), then `scripts/doc_sections.sh <name>` to read just one section.
 * Step details: `.frappe-agent/workflow/` (`REQUIREMENT_ANALYSIS.md`, `IMPLEMENTATION.md`, `REVIEW.md`)
 * Git rules: `.frappe-agent/workflow/GIT_WORKFLOW.md` (examples only in `workflow/GIT_REFERENCE.md`)
 * Permissions, production, secrets: `.frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md`

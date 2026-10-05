@@ -51,7 +51,7 @@ Once you decide, the solution is **locked**. The agent cannot change it silently
 The agent reads only what a step needs, not the whole knowledge base:
 
 * `AGENTS.md` (always loaded) has a short LOW-task path, so a typo fix never reads the task workflow.
-* `knowledge/INDEX.md` routes to one part, and `scripts/doc_sections.sh <NN>` lists its headings with line ranges so only one section is read.
+* `knowledge/INDEX.md` routes to one part, and `scripts/doc_sections.sh <name>` lists its headings with line ranges so only one section is read.
 * The Git rules are separate from the Git examples, which are read only when needed.
 * The task record has a short card on top, and `scripts/search_history.sh` shows future tasks just the card.
 * `config.json` is small; the regex patterns for hooks are in `policy.json`.

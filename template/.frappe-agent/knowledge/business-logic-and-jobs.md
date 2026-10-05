@@ -1,4 +1,4 @@
-# Part 5 — Business Logic, Jobs & Reports
+# Business Logic, Jobs & Reports
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

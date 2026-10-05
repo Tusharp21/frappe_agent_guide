@@ -1,4 +1,4 @@
-# Part 9 — Debugging & Operations
+# Debugging & Operations
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

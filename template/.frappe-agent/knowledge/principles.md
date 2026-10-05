@@ -1,4 +1,4 @@
-# Part 10 — Final Principles
+# Principles
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

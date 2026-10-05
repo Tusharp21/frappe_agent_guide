@@ -1,4 +1,4 @@
-# Part 2 — Doctype & Script Development
+# Doctype & Script Development
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

@@ -6,7 +6,7 @@
 # goes stale. Read-only.
 #
 # Usage:
-#   .frappe-agent/scripts/doc_sections.sh <doc>   # e.g. 02, 02-doctype-development, or a path
+#   .frappe-agent/scripts/doc_sections.sh <doc>   # start of the file name, e.g. doctype, security, or a path
 #   .frappe-agent/scripts/doc_sections.sh         # list the docs with sizes
 
 set -euo pipefail
@@ -15,7 +15,8 @@ FA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DOCS="$FA_DIR/knowledge"
 
 if [ $# -eq 0 ]; then
-  for f in "$DOCS"/[0-9]*.md; do
+  for f in "$DOCS"/*.md; do
+    [ "$(basename "$f")" = "INDEX.md" ] && continue
     printf '  %5d lines  %s\n' "$(wc -l < "$f")" "$(basename "$f")"
   done
   exit 0

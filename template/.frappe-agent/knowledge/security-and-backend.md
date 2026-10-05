@@ -1,4 +1,4 @@
-# Part 4 — Settings, Security & Backend Practices
+# Settings, Security & Backend Practices
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

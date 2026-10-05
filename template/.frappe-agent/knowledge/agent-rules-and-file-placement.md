@@ -1,4 +1,4 @@
-# Part 7 — Agent Rules & File Placement
+# Agent Rules & File Placement
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
@@ -6,7 +6,7 @@ _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
 ## Choosing the Extension Point
 
-Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./05-business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `knowledge/02-doctype-development.md`).
+Choose the smallest appropriate extension point using the decision framework in ["Business Logic Placement"](./business-logic-and-jobs.md). For a field/metadata-only change, use a Custom Field with export instead (see "Custom Fields" and "Customization Export" in `knowledge/doctype-and-scripts.md`).
 
 ---
 

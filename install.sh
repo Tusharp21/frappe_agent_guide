@@ -284,7 +284,7 @@ legacy=()
 for item in FRAPPE_DEVELOPMENT.md GIT_WORKFLOW.md workflow templates; do
   [ -e "$TARGET_DIR/$item" ] && legacy+=("$item")
 done
-if [ -e "$TARGET_DIR/docs/01-architecture-and-bench.md" ]; then legacy+=("docs"); fi
+if [ -e "$TARGET_DIR/docs/architecture-and-bench.md" ]; then legacy+=("docs"); fi
 if [ "${#legacy[@]}" -gt 0 ]; then
   echo
   echo "Note: an older root-level install was detected. These are now unused and can be"

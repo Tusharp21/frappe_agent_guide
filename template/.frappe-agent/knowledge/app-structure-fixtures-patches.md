@@ -1,4 +1,4 @@
-# Part 3 — App Structure & Config Files
+# App Structure, Fixtures, Patches & Config Files
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 

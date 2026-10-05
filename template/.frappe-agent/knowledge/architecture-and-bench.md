@@ -1,4 +1,4 @@
-# Part 1 — Architecture, Philosophy & Bench
+# Architecture, Philosophy & Bench
 
 _Part of the Frappe knowledge base. Start at [INDEX.md](./INDEX.md)._
 
@@ -18,7 +18,7 @@ The primary principle is:
 
 > Organize functionality around the relevant Doctype while keeping configuration, customization, business logic, and framework code properly separated.
 
-Always prefer standard Frappe/ERPNext functionality and supported customization mechanisms over new code, and never modify standard Frappe/ERPNext source directly (see "Do Not Modify Standard Frappe/ERPNext Code Directly" below). For the full decision framework on which extension point (Client Script, Server Script, Python, hooks.py, Patch, Fixture, or Settings) to use for a given requirement, see ["Business Logic Placement"](./05-business-logic-and-jobs.md).
+Always prefer standard Frappe/ERPNext functionality and supported customization mechanisms over new code, and never modify standard Frappe/ERPNext source directly (see "Do Not Modify Standard Frappe/ERPNext Code Directly" below). For the full decision framework on which extension point (Client Script, Server Script, Python, hooks.py, Patch, Fixture, or Settings) to use for a given requirement, see ["Business Logic Placement"](./business-logic-and-jobs.md).
 
 ---
 
