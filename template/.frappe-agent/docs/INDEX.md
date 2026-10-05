@@ -19,4 +19,6 @@ Do **not** read every file in `docs/`. Pick the row that matches the task, read 
 
 * [`../workflow/REQUIREMENT_ANALYSIS.md`](../workflow/REQUIREMENT_ANALYSIS.md) before planning.
 * [`../GIT_WORKFLOW.md`](../GIT_WORKFLOW.md) before any Git operation.
+* [`../workflow/PERMISSIONS_AND_PRODUCTION.md`](../workflow/PERMISSIONS_AND_PRODUCTION.md) before running any command that installs, migrates, deletes, pushes, or touches an environment.
+* [`../config.json`](../config.json) for approval mode, audit, and production settings (guide: [`../CONFIGURATION.md`](../CONFIGURATION.md)).
 * [`../project_knowledge/APP_MAP.md`](../project_knowledge/APP_MAP.md) to see what is already known about this bench.

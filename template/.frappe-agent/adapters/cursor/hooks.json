@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      { "command": "bash .frappe-agent/hooks/guard.sh", "timeout": 15 }
+    ],
+    "beforeReadFile": [
+      { "command": "bash .frappe-agent/hooks/guard.sh", "timeout": 15 }
+    ],
+    "afterShellExecution": [
+      { "command": "bash .frappe-agent/hooks/audit_log.sh", "timeout": 15 }
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+# Local audit trail and command log: never commit these.
+audit/

@@ -12,6 +12,14 @@
 ## Expected Behavior
 [How the system should work after the task is complete]
 
+## Tier and Risk
+[Trivial / Standard / Major, and Low / Medium / High risk, with the reason]
+
+## Acceptance Criteria
+[Numbered, testable "definition of done". The user can edit these. Examples: behavior A works; existing behavior B is unchanged; edge case C is handled; tests added/updated; final report lists files changed and test evidence.]
+1.
+2.
+
 ## Relevant DocTypes
 *
 *
@@ -44,6 +52,9 @@
 
 ## Testing
 [How this feature should be tested]
+
+## Rollback Plan
+[Required for Major tier. How to undo this change, including data/migration effects.]
 
 ## Risks
 [Potential side effects or areas of concern]

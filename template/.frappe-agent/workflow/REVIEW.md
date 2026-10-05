@@ -39,3 +39,12 @@ Run these for real and report the actual results. Run them from the bench root; 
 | Major | Everything for Standard, plus: run `bench --site <site> migrate` on a **test site or backup copy only** (never production) when a patch, fixture, or schema change is involved, and confirm the patch is listed in `patches.txt` and fixtures are exported. |
 
 For Standard and Major tasks, review the final `git diff` with a separate read-only reviewer (for example a subagent) rather than relying only on this self-review.
+
+## 7. Final Report and Audit Record
+
+Evidence matters more than the word "done". Never write that tests passed unless you ran them and have the output.
+
+* If the task's tier is listed in `audit.tiers` in [`../config.json`](../config.json), create the record with `../scripts/new_run.sh "<task title>" <tier>` and fill in [`../templates/RUN_REPORT.md`](../templates/RUN_REPORT.md): requirement, acceptance criteria (met / not met / not verified), files changed (`git diff --stat`), commands executed, **actual** test output (or "NOT RUN" and why), review findings, remaining risks, branch, commit ID, and the rollback plan for Major tasks.
+* For tiers without a record, give the user a short report: what changed, files changed, commands run, test results, risks, branch and commit.
+* Do not mark the work done while any acceptance criterion is unverified without saying so.
+* If the change must reach production, write a deployment plan with [`../templates/DEPLOYMENT_PLAN.md`](../templates/DEPLOYMENT_PLAN.md) and hand it to the user. Do not deploy.

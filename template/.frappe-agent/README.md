@@ -12,8 +12,12 @@ Rulebook and knowledge base for AI coding agents (Claude Code, Cursor, GitHub Co
 | `workflow/` | Requirement analysis, implementation, and review steps |
 | `GIT_WORKFLOW.md` | Branching, commit, and safety rules |
 | `templates/TASK_TEMPLATE.md` | Format for documenting a task |
-| `scripts/inspect_app.sh` | Read-only discovery of a bench or app |
-| `hooks/`, `adapters/claude/` | Claude Code guard/lint hooks, settings and skills (used only with `--with-claude-hooks`) |
+| `config.json` | Your settings: approval mode, audit, production sites, protected files, blocked/ask commands (see `CONFIGURATION.md`) |
+| `CONFIGURATION.md` | How to configure and use all of this in a project |
+| `workflow/PERMISSIONS_AND_PRODUCTION.md` | Risk policy, read-only production, secrets |
+| `scripts/` | `inspect_app.sh` (discovery), `new_run.sh` (audit record), `install_git_hooks.sh` |
+| `hooks/`, `adapters/` | Enforcement hooks and agent settings (used only with `--with-*-hooks`) |
+| `audit/` | Local audit trail (created on first use; git-ignored) |
 | `project_knowledge/` | Your project's facts and decisions (kept on update) |
 | `VERSION` | Installed template version |
 
@@ -30,4 +34,4 @@ The agent follows the app's config and never bypasses it with `--no-verify`.
 
 ## Updating
 
-Re-run the installer with `--update`. Template files are replaced; `project_knowledge/` is preserved.
+Re-run the installer with `--update`. Template files are replaced; `config.json`, `project_knowledge/` and `audit/` are preserved.
