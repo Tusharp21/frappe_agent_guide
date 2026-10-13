@@ -21,6 +21,7 @@ This adds two items to your project: `AGENTS.md` and a `.frappe-agent/` folder. 
 | Understand how a task runs | [guide/03-daily-use.md](./guide/03-daily-use.md) |
 | Know what the agent can do, and enforce it | [guide/04-safety-and-enforcement.md](./guide/04-safety-and-enforcement.md) |
 | Find old work and read the audit record | [guide/05-history-and-audit.md](./guide/05-history-and-audit.md) |
+| Try the plan layer and the gates with a real agent | [guide/06-try-it-live.md](./guide/06-try-it-live.md) |
 
 ## Repository layout
 
