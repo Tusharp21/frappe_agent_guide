@@ -175,6 +175,18 @@ def check_record_integrity(path, ti):
             texts += [e.get("old_string") or "", e.get("new_string") or ""]
     if any("**State:**" in t for t in texts):
         block("this edit touches the State line of a task record; " + STATE_MSG)
+    SCOPE_MSG = ("the task's Allowed paths are part of what the user approved; once the task is past "
+                 "DRAFT a change needs a new decision: task_state.sh <id> DRAFT, then lock again")
+    target = path if os.path.isabs(path) else os.path.join(cwd, path)
+    try:
+        existing = open(target).read()
+    except Exception:
+        existing = ""
+    if existing and card_value(existing, "State") not in ("", "DRAFT"):
+        if any("**Allowed paths:**" in t for t in texts):
+            block("this edit touches the Allowed paths of a task that is no longer DRAFT; " + SCOPE_MSG)
+        if "content" in ti and card_value(ti["content"], "Allowed paths") != card_value(existing, "Allowed paths"):
+            block("this write changes the Allowed paths of a task that is no longer DRAFT; " + SCOPE_MSG)
     if "content" in ti:
         target = path if os.path.isabs(path) else os.path.join(cwd, path)
         try:

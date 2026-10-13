@@ -19,6 +19,8 @@ Classify as soon as you understand the task; if unsure, pick the higher level, a
 | **MEDIUM** | Business logic, validation, client/server script, report, API, DocType logic, a new field or DocType needing no migration of existing data | Full flow below; user decision and approval required |
 | **HIGH** | Database migration or patch, schema change touching existing data, permission/role/security changes, anything affecting production, more than one app | MEDIUM flow plus rollback plan, migration-impact note, validation on a test site, a deployment plan for the human, and tests may not be skipped |
 
+A task that belongs to a plan ([`PLAN.md`](./PLAN.md)) is created by `../scripts/plan_next.sh`, not by hand. Its scope (`Allowed paths`) and acceptance criteria come from the locked plan, and a LOW or MEDIUM phase starts already `LOCKED`, so steps 1 to 5 are done; a HIGH phase starts `DRAFT` and goes through steps 4 and 5 itself.
+
 ## Mode: decide first, or automatic
 
 Read [`../config.json`](../config.json). In your first message, with your understanding, the risk level and what you found in existing work, ask:

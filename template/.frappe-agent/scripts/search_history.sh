@@ -24,7 +24,7 @@ HIST="$(history_dir)"
 BENCH="$(dirname "$FA_DIR")"
 found=0
 
-echo "== Past tasks (best matches first; open the file for full detail)"
+echo "== Past tasks and plans (best matches first; open the file for full detail)"
 if [ -d "$HIST" ] || [ -d "$FA_DIR/audit" ]; then
   # score = number of distinct keywords found in the file
   scored=()
@@ -32,7 +32,7 @@ if [ -d "$HIST" ] || [ -d "$FA_DIR/audit" ]; then
     score=0
     for k in "${KEYS[@]}"; do grep -qiF -- "$k" "$f" && score=$((score + 1)); done
     [ "$score" -gt 0 ] && scored+=("$score|$f")
-  done < <(find "$HIST" "$FA_DIR/audit" -maxdepth 1 \( -name 'TASK-*.md' -o -name 'RUN-*.md' \) 2>/dev/null | sort -u)
+  done < <(find "$HIST" "$FA_DIR/audit" -maxdepth 1 \( -name 'TASK-*.md' -o -name 'PLAN-*.md' -o -name 'RUN-*.md' \) 2>/dev/null | sort -u)
   if [ "${#scored[@]}" -gt 0 ]; then
     while IFS='|' read -r score f; do
       echo

@@ -5,13 +5,13 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 
 ## Where things are
 
-* **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
+* **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. **Large work (a plan of phases):** `workflow/PLAN.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
 * Standards: `.frappe-agent/knowledge/INDEX.md` (routing table), then `scripts/doc_sections.sh <name>` to read just one section.
 * Step details: `.frappe-agent/workflow/` (`REQUIREMENT_ANALYSIS.md`, `IMPLEMENTATION.md`, `REVIEW.md`)
 * Git rules: `.frappe-agent/workflow/GIT_WORKFLOW.md` (examples only in `workflow/GIT_REFERENCE.md`)
 * Permissions, production, secrets: `.frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md`
 * Settings: `.frappe-agent/config.json` (small; read it each task)
-* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `search_history.sh`, `inspect_app.sh`)
+* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `new_plan.sh`, `plan_state.sh`, `plan_next.sh`, `search_history.sh`, `inspect_app.sh`)
 * Project knowledge: `.frappe-agent/project_knowledge/` (`APP_MAP.md`, `DECISIONS.md`)
 
 ## LOW tasks (text, label, typo, styling; no logic, permission, schema or data impact)
@@ -19,6 +19,8 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 Do not read `TASK.md`. Read `config.json`, give your understanding and a one-line plan, ask whether to wait for the user's go-ahead or just do it (per `approval_mode`), make the change, run the app's linter, and give a short summary. No task record. If it turns out to be bigger, reclassify as MEDIUM or HIGH.
 
 ## Process (MEDIUM / HIGH)
+
+If the request has two or more separate features, spans more than one DocType or app, or has a HIGH part, make a plan first (`.frappe-agent/workflow/PLAN.md`): the user approves and locks the phases once, then each phase runs as one task below, and you stop after every phase until the user says continue.
 
 Follow `.frappe-agent/workflow/TASK.md`:
 
