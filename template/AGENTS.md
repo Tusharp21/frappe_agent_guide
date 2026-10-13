@@ -26,7 +26,7 @@ Follow `.frappe-agent/workflow/TASK.md`:
 2. **Check existing work first:** `search_history.sh`, `inspect_app.sh`, `APP_MAP.md`, the code. Reuse or extend before building new.
 3. **Clarify** ambiguous business points with short questions. Do not guess.
 4. **Propose**, with acceptance criteria, then **wait for the user's decision and lock the solution**. Write no final code before that.
-5. **Execute** only the locked solution. Never change it silently; if it must change, stop and get a new decision.
+5. **Execute** only the locked solution, inside the task's `Allowed paths`. Never change it silently; if it must change, stop and get a new decision. Task state changes only through `scripts/task_state.sh`; never edit a record's `State:` line, `tasks/.active`, or the rule files (`.frappe-agent/` outside `tasks/` and `project_knowledge/`, `AGENTS.md`). The hooks enforce this (see `workflow/TASK.md`, "Enforced gates").
 6. **Test and review** with real commands (`REVIEW.md`), then write the summary and audit evidence in the task record.
 7. **Get the user's approval** before marking COMPLETED, then update the history and `project_knowledge/`.
 

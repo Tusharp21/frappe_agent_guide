@@ -14,6 +14,7 @@
 - **Related:** <!-- module / DocTypes -->
 - **Decision:** <!-- the user's decision, one line -->
 - **Locked solution:** <!-- one line -->
+- **Allowed paths:** <!-- set when locking: files or folders this task may edit, relative to the bench root, comma separated (apps/myapp/myapp/doctype/foo/, apps/myapp/myapp/hooks.py). Empty = scope gate off. -->
 - **Files:** <!-- changed files, comma separated -->
 - **Tests:** NOT RUN <!-- PASS / FAIL / PARTIAL / NOT RUN -->
 - **Approval:** Pending <!-- who, when, what they said -->
@@ -54,6 +55,7 @@
 ## Solution proposal
 * Proposed solution (numbered steps):
 * Files likely affected:
+* Out of scope (what this task will not change):
 * Existing functionality reused:
 * Potential impact:
 * Risks:

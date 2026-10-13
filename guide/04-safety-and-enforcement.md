@@ -24,7 +24,11 @@ Rules in `AGENTS.md` are advisory. These layers enforce them; install them with 
 `--with-all-hooks` installs all of them. The hook layers run one shared `hooks/guard.sh`, driven by `policy.json` and `config.json`:
 
 * **Blocked:** push to `main`/`master`, force-push, `--no-verify`, `reset --hard`, `clean`, `branch -D`, `--ours`/`--theirs`; any command targeting a production site or host; reading or editing protected files; destructive SQL, `bench drop-site`, firewall/DNS changes.
-* **Asks first:** dependency installs, `bench migrate`/`restore`/`execute`/..., deletes, `curl`/`wget`, `git push`, `sudo`.
+* **Asks first:** dependency installs, `bench migrate`/`restore`/`execute`/..., deletes, `curl`/`wget`, `git commit`, `git push`, `sudo`.
+* **Process gates** (`process_gates` in `policy.json`, on by default; see [02](./02-configuration.md)): app code under `apps/` can be edited only while the active task is `LOCKED` or `IN_PROGRESS`, and only inside the card's `Allowed paths` when set. With no active task the agent's tool asks you (so a LOW change costs one click). A task cannot wait for your approval while its card says `Tests: NOT RUN`.
+* **The agent cannot lock itself:** it may not edit a record's `State:` line, `tasks/.active`, or the files that define its rules (`.frappe-agent/` except `tasks/`, `project_knowledge/` and `audit/`; `AGENTS.md`; the hook settings). You change those yourself.
+
+These gates are enforced by the Claude Code and Copilot hooks, which see edit tools. Cursor's hooks cover shell commands and file reads only, and Codex has no hooks, so there the process gates do not apply and `AGENTS.md` is advisory.
 
 An existing `.claude/settings.json`, `.cursor/hooks.json` or `.github/hooks/frappe-agent.json` is never overwritten: the installer tells you to merge by hand.
 
@@ -34,4 +38,6 @@ An existing `.claude/settings.json`, `.cursor/hooks.json` or `.github/hooks/frap
 * The strongest protection for production is to **keep production credentials out of the agent's environment**: no production SSH keys, no production `site_config.json`, no VPN into production on the machine where the agent runs.
 * `.cursorignore` does not stop terminal commands; the Cursor hook does. GitHub's Copilot content exclusion is a repository/organization setting and does not apply to agent mode, so the Copilot hook is the control there.
 * The Cursor and Copilot hook formats are newer than Claude Code's and were verified against their documentation, not in a live session. After installing, ask the agent to `cat .env` and confirm it is refused.
-* Task states and the solution lock are process friction, not a guarantee ([03](./03-daily-use.md)).
+* Task states and the solution lock are process friction, not a guarantee ([03](./03-daily-use.md)). The hooks cannot tell whether the quote in `--note` really came from you, and a shell trick the patterns do not recognise can still write a file. Read the summary before you approve.
+* There is one active task per bench (`tasks/.active`). Two agent sessions on the same bench at once overwrite each other's pointer.
+* Without `python3` the hook blocks every call rather than letting everything through. If the hook input cannot be parsed, the call is allowed.
