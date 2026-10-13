@@ -11,6 +11,7 @@ Documentation for the people who install and use this template. It is not instal
 | Understand how a task runs and what I will be asked | [03 Daily use](./03-daily-use.md) |
 | Know what the agent can and cannot do, and turn on enforcement | [04 Safety and enforcement](./04-safety-and-enforcement.md) |
 | Find old work, share history, read the audit record | [05 History and audit](./05-history-and-audit.md) |
+| Try the plan layer and the gates with a real agent, step by step | [06 Try it live](./06-try-it-live.md) (sample: [examples/sample-plan.md](./examples/sample-plan.md)) |
 
 ## What gets installed
 

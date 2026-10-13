@@ -19,6 +19,8 @@ Classify as soon as you understand the task; if unsure, pick the higher level, a
 | **MEDIUM** | Business logic, validation, client/server script, report, API, DocType logic, a new field or DocType needing no migration of existing data | Full flow below; user decision and approval required |
 | **HIGH** | Database migration or patch, schema change touching existing data, permission/role/security changes, anything affecting production, more than one app | MEDIUM flow plus rollback plan, migration-impact note, validation on a test site, a deployment plan for the human, and tests may not be skipped |
 
+A task that belongs to a plan ([`PLAN.md`](./PLAN.md)) is created by `../scripts/plan_next.sh`, not by hand. Its scope (`Allowed paths`) and acceptance criteria come from the locked plan, and a LOW or MEDIUM phase starts already `LOCKED`, so steps 1 to 5 are done; a HIGH phase starts `DRAFT` and goes through steps 4 and 5 itself.
+
 ## Mode: decide first, or automatic
 
 Read [`../config.json`](../config.json). In your first message, with your understanding, the risk level and what you found in existing work, ask:
@@ -50,7 +52,7 @@ Records are created for the risk levels in `history.record_for`. Fill the matchi
 2. **Understand and check existing work.** Never build what already exists. Run `../scripts/search_history.sh <keywords>` and `../scripts/inspect_app.sh <app>`, read `../project_knowledge/APP_MAP.md`, search the code for existing implementations and patterns. Decide: reuse, extend, or new. (Section: Understanding.)
 3. **Clarify.** If anything important is ambiguous, do not code and do not guess a business decision: ask short, specific questions, one at a time, each with why it matters and options. Record each answer in the user's words. (Section: Clarification.)
 4. **Propose.** Give the solution with acceptance criteria; HIGH adds a rollback plan and migration-impact note. Give a recommendation, not just options. (Section: Solution proposal.)
-5. **Decide and lock.** Record the user's decision, then `../scripts/task_state.sh <id> LOCKED --note "<what the user said>"`. Never lock on your own. **A locked solution is never changed silently**: if it must change materially, stop, move back to `DRAFT`, explain, and get a new decision. (Section: Decision and lock.)
+5. **Decide and lock.** Record the user's decision, fill the card's `Allowed paths` (the files or folders this task may edit, relative to the bench root) and the proposal's "Out of scope", then `../scripts/task_state.sh <id> LOCKED --note "<what the user said>"`. Never lock on your own. **A locked solution is never changed silently**: if it must change materially, stop, move back to `DRAFT`, explain, and get a new decision. (Section: Decision and lock.)
 6. **Execute.** `IN_PROGRESS`; follow [`IMPLEMENTATION.md`](./IMPLEMENTATION.md). (Section: Execution log.)
 7. **Test and verify.** Run the checks in [`REVIEW.md`](./REVIEW.md) section 6 and report real results; "tests should pass" is not evidence. (Section: Testing report.)
 8. **Review.** Review the diff and fix findings, as in [`REVIEW.md`](./REVIEW.md). (Section: Review.)
@@ -59,6 +61,21 @@ Records are created for the risk levels in `history.record_for`. Fill the matchi
 11. **Update history.** Update the card at the top of the record (decision, locked solution, files, tests, approval, commit). Add lasting facts to `../project_knowledge/APP_MAP.md` and decisions to `DECISIONS.md`. If a mistake repeated, propose a rule, test or checklist item. (Section: Lessons.)
 
 You never deploy. If the change must reach production, write the plan per [`DEPLOYMENT.md`](./DEPLOYMENT.md) and hand it to the user. COMPLETED means development is approved; update the card's `Deployment` field when the human reports the result.
+
+## Enforced gates
+
+When the Claude Code or Copilot hooks are installed, `../hooks/guard.sh` enforces the process, not only safety (settings: `process_gates` in `../policy.json`). If a gate stops you, do what it says; do not look for another way around it.
+
+| You try | Result | What to do |
+| ------- | ------ | ---------- |
+| Edit or write code under `apps/` with no active task | Asks the user | LOW change: the user may approve. Otherwise `new_task.sh` first |
+| Edit app code while the task is `DRAFT` or `WAITING_FOR_APPROVAL` | Blocked | Get the user's decision and lock; or move back to `IN_PROGRESS` if changes were requested |
+| Edit a file outside the card's `Allowed paths` | Asks the user | A scope change needs a new decision: back to `DRAFT`, or the user approves that file |
+| `WAITING_FOR_APPROVAL` while the card says `Tests: NOT RUN` | `task_state.sh` refuses (HIGH always; MEDIUM unless `--note` gives the reason) | Run the tests and set `Tests` |
+| Edit a record's `State:` line, `tasks/.active`, or a rule file (`.frappe-agent/` outside `tasks/` and `project_knowledge/`, `AGENTS.md`, hook settings) | Blocked | State moves only through `task_state.sh`; rule files are changed by the user |
+| `git commit` | Asks the user | Commit when asked |
+
+`task_state.sh` makes the task you move the active one. To resume a task without changing its state (a new session, or switching between tasks), run `../scripts/task_state.sh <id> --activate`. The process hooks see the editor tools and shell commands; they are friction against mistakes, not a security boundary.
 
 ## Non-negotiable rules
 

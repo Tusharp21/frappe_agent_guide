@@ -4,6 +4,8 @@
 #
 # Usage:
 #   .frappe-agent/scripts/task_state.sh <TASK-ID|path> <STATE> [--note "text"] [--force]
+#   .frappe-agent/scripts/task_state.sh <TASK-ID|path> --activate
+#                         make it the active task without changing its state
 #
 # States:
 #   DRAFT                 open: understanding, questions, proposal; the solution is not locked yet
@@ -19,6 +21,14 @@
 # task on its own. LOW-risk tasks may skip LOCKED and approval. If a locked
 # solution must change materially, move back to DRAFT. --force allows any
 # other move and is logged as forced.
+#
+# Evidence gate: a MEDIUM or HIGH task cannot go to WAITING_FOR_APPROVAL while
+# the card says "Tests: NOT RUN". MEDIUM may proceed with a --note giving the
+# reason; HIGH may not (tests are never skipped for HIGH). --force overrides
+# and is logged.
+#
+# The task you move (other than to COMPLETED) becomes the active task, which
+# hooks/guard.sh checks before allowing edits to app code.
 
 set -euo pipefail
 
@@ -26,7 +36,14 @@ FA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=_lib.sh
 . "$FA_DIR/scripts/_lib.sh"
 
-[ $# -ge 2 ] || { echo "usage: task_state.sh <TASK-ID|path> <STATE> [--note \"text\"] [--force]" >&2; exit 1; }
+[ $# -ge 2 ] || { echo "usage: task_state.sh <TASK-ID|path> <STATE> [--note \"text\"] [--force]   or   <TASK-ID|path> --activate" >&2; exit 1; }
+if [ "$2" = "--activate" ]; then
+  if [ -f "$1" ]; then AFILE="$1"; else AFILE="$(history_dir)/$1.md"; fi
+  [ -f "$AFILE" ] || { echo "Task record not found: $1" >&2; exit 1; }
+  printf '%s\n' "$(basename "$AFILE" .md)" > "$(active_file)"
+  echo "$(basename "$AFILE" .md) is now the active task"
+  exit 0
+fi
 REF="$1"; NEW="$(printf '%s' "$2" | tr '[:lower:]' '[:upper:]')"; shift 2
 NOTE=""; FORCE=0
 while [ $# -gt 0 ]; do
@@ -108,6 +125,20 @@ if [ -z "$FORCED" ]; then
   fi
 fi
 
+if [ -z "$FORCED" ] && [ "$NEW" = "WAITING_FOR_APPROVAL" ] && [ "$RISK" != "LOW" ]; then
+  TESTS="$(card_field "$FILE" Tests)"
+  case "$TESTS" in
+    ""|"NOT RUN"*)
+      if [ "$RISK" = "HIGH" ]; then
+        echo "A HIGH task cannot wait for approval with Tests: NOT RUN. Run the tests, paste the real output in the record and set the card's Tests field." >&2
+        exit 1
+      elif [ -z "$NOTE" ]; then
+        echo "Tests are NOT RUN. Run them and set the card's Tests field, or give the reason in --note." >&2
+        exit 1
+      fi ;;
+  esac
+fi
+
 now="$(date '+%Y-%m-%d %H:%M')"
 safe_note="$(printf '%s' "${NOTE:-}" | tr '\n|' '  ')"
 tmp="$(mktemp)"
@@ -119,4 +150,16 @@ awk -v new="$NEW" -v row="| $now | $NEW$FORCED | $safe_note |" '
   { print }
 ' "$FILE" > "$tmp"
 cat "$tmp" > "$FILE"
-echo "$(basename "$FILE" .md): $CUR -> $NEW$FORCED"
+
+ID="$(basename "$FILE" .md)"
+ACTIVE="$(active_file)"
+if [ "$NEW" = "COMPLETED" ]; then
+  if [ "$(cat "$ACTIVE" 2>/dev/null)" = "$ID" ]; then rm -f "$ACTIVE"; fi
+else
+  printf '%s\n' "$ID" > "$ACTIVE"
+fi
+
+echo "$ID: $CUR -> $NEW$FORCED"
+if [ "$NEW" = "LOCKED" ] && [ -z "$(card_field "$FILE" "Allowed paths")" ]; then
+  echo "note: the card has no 'Allowed paths'; the scope gate is inactive for this task." >&2
+fi

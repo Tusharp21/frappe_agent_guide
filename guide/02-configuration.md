@@ -31,10 +31,21 @@ A key in `config.json` overrides the same key in `policy.json`, so installs made
 | `audit.enabled` (`policy.json`) | `true` / `false` | Turn the command log on or off |
 | `audit.log_commands` (`policy.json`) | `true` / `false` | The Claude Code, Cursor and Copilot hooks append each shell command to `audit/commands.log` (secrets masked) |
 | `protected_files` (`policy.json`) | list of file-name globs | Files the agent may not read or edit (secrets). `*.example`, `*.sample` and `*.template` variants are allowed |
+| `process_gates.enabled` (`policy.json`) | `true` (default) / `false` | Turn all process gates off (edit gate, scope gate, rule-file protection) |
+| `process_gates.no_active_task` | `ask` (default), `block`, `allow` | Editing app code when no task is active |
+| `process_gates.draft_edit` | `block` (default), `ask`, `allow` | Editing app code while the task is `DRAFT` or `WAITING_FOR_APPROVAL` |
+| `process_gates.out_of_scope` | `ask` (default), `block`, `allow` | Editing a file outside the card's `Allowed paths` |
+| `process_gates.harness_files` | `block` (default), `ask`, `allow` | The agent editing its own rule files. Set `allow` only while you are changing the template yourself |
+| `gated_paths` (`policy.json`) | list of folders from the bench root | Where the edit gates apply. Default `["apps"]` |
+| `harness_paths` (`policy.json`) | list of paths from the bench root | Replaces the default rule-file list (`.frappe-agent/`, `AGENTS.md`, hook settings). `tasks/` and `project_knowledge/` stay writable |
 | `blocked_commands` (`policy.json`) | list of regular expressions | Prohibited actions, blocked outright |
 | `ask_commands` (`policy.json`) | list of regular expressions | Ask-first actions; the agent's tool asks you first |
 
 Patterns are case-insensitive regular expressions written as JSON strings, so backslashes are doubled (`\\b`). To loosen a rule, remove its entry; to add one, append a pattern.
+
+## Upgrading from 1.4.x
+
+`--update` keeps your `policy.json`, so it will not gain `process_gates` or the `git commit` ask pattern by itself. That is safe: the hook uses the defaults in this table when the key is missing, so the gates are on. To make `git commit` ask, add `"\\bgit\\s+commit\\b"` to `ask_commands`. Reinstall with `--with-claude-hooks` only if you have no `.claude/settings.json` yet; the hook entries needed are the existing `guard.sh` ones.
 
 ## Upgrading an older `config.json`
 

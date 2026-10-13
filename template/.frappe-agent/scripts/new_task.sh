@@ -51,4 +51,7 @@ sed -e "s|{{TASK_ID}}|$id|g" \
       { print }
     ' > "$out"
 
+# Make this the task the agent is working on (read by hooks/guard.sh).
+printf '%s\n' "$id" > "$HIST/.active"
+
 echo "$out"

@@ -4,7 +4,7 @@ The checklist for step 6 of the [`TASK.md`](./TASK.md) workflow. Begin only afte
 
 ## 1. Verify the Scope
 * Re-read the locked solution and the acceptance criteria in the task record.
-* Make no changes outside the agreed scope and files: no unrelated refactors, no new dependencies without approval.
+* Make no changes outside the agreed scope and files: no unrelated refactors, no new dependencies without approval. The card's `Allowed paths` lists what the task may edit; the hook asks the user before an edit outside it, so name the file and why before you try.
 * If the solution must change materially, stop and follow `TASK.md` step 5.
 
 ## 2. Code Implementation

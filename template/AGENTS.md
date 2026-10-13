@@ -5,13 +5,13 @@ All detailed guidance lives in **`.frappe-agent/`**. This file has only the hard
 
 ## Where things are
 
-* **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
+* **Task workflow (MEDIUM/HIGH):** `.frappe-agent/workflow/TASK.md`. **Large work (a plan of phases):** `workflow/PLAN.md`. Others: `BUG.md`, `CODE_REVIEW.md`, `DEPLOYMENT.md`.
 * Standards: `.frappe-agent/knowledge/INDEX.md` (routing table), then `scripts/doc_sections.sh <name>` to read just one section.
 * Step details: `.frappe-agent/workflow/` (`REQUIREMENT_ANALYSIS.md`, `IMPLEMENTATION.md`, `REVIEW.md`)
 * Git rules: `.frappe-agent/workflow/GIT_WORKFLOW.md` (examples only in `workflow/GIT_REFERENCE.md`)
 * Permissions, production, secrets: `.frappe-agent/workflow/PERMISSIONS_AND_PRODUCTION.md`
 * Settings: `.frappe-agent/config.json` (small; read it each task)
-* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `search_history.sh`, `inspect_app.sh`)
+* Scripts: `.frappe-agent/scripts/` (`new_task.sh`, `task_state.sh`, `new_plan.sh`, `plan_state.sh`, `plan_next.sh`, `search_history.sh`, `inspect_app.sh`)
 * Project knowledge: `.frappe-agent/project_knowledge/` (`APP_MAP.md`, `DECISIONS.md`)
 
 ## LOW tasks (text, label, typo, styling; no logic, permission, schema or data impact)
@@ -20,13 +20,15 @@ Do not read `TASK.md`. Read `config.json`, give your understanding and a one-lin
 
 ## Process (MEDIUM / HIGH)
 
+If the request has two or more separate features, spans more than one DocType or app, or has a HIGH part, make a plan first (`.frappe-agent/workflow/PLAN.md`): the user approves and locks the phases once, then each phase runs as one task below, and you stop after every phase until the user says continue.
+
 Follow `.frappe-agent/workflow/TASK.md`:
 
 1. **Understand** the request and read `config.json`. Classify the risk (**LOW / MEDIUM / HIGH**; if unsure, higher). In your first message give your understanding and ask whether to **propose a solution and wait for the user's decision, or run automatically** (HIGH always needs a decision).
 2. **Check existing work first:** `search_history.sh`, `inspect_app.sh`, `APP_MAP.md`, the code. Reuse or extend before building new.
 3. **Clarify** ambiguous business points with short questions. Do not guess.
 4. **Propose**, with acceptance criteria, then **wait for the user's decision and lock the solution**. Write no final code before that.
-5. **Execute** only the locked solution. Never change it silently; if it must change, stop and get a new decision.
+5. **Execute** only the locked solution, inside the task's `Allowed paths`. Never change it silently; if it must change, stop and get a new decision. Task state changes only through `scripts/task_state.sh`; never edit a record's `State:` line, `tasks/.active`, or the rule files (`.frappe-agent/` outside `tasks/` and `project_knowledge/`, `AGENTS.md`). The hooks enforce this (see `workflow/TASK.md`, "Enforced gates").
 6. **Test and review** with real commands (`REVIEW.md`), then write the summary and audit evidence in the task record.
 7. **Get the user's approval** before marking COMPLETED, then update the history and `project_knowledge/`.
 

@@ -14,6 +14,27 @@ UNDERSTAND -> CHECK EXISTING -> CLARIFY -> PROPOSE -> YOUR DECISION -> LOCK
 5. **You** approve (MEDIUM and HIGH). The agent then records the task and updates `project_knowledge/`.
 6. **Production:** the agent writes a deployment plan; you deploy and report the result.
 
+## Large work: plans and phases
+
+For bigger work (two or more features, more than one DocType or app, or anything HIGH) the agent makes a **plan** first, the way a team scopes a project:
+
+```text
+you describe the work -> agent checks existing work, asks questions
+  -> agent writes PLAN: scope, out of scope, phases (risk, files it may touch, acceptance criteria)
+  -> you review and approve -> the plan is LOCKED
+  -> phase 1 runs as a task -> you verify its acceptance criteria -> you approve
+  -> agent stops and reports -> you say "continue" -> phase 2 ...
+  -> all phases done -> you approve the result -> plan COMPLETED
+```
+
+* **You approve scope once**, at the plan. LOW and MEDIUM phases then start already locked; a HIGH phase still gets its own proposal and lock.
+* **It stops after every phase.** The next phase starts only on your go-ahead; the scripts refuse otherwise.
+* **Changing the plan is a change request:** the plan goes back to DRAFT, you decide again, it is locked again. A locked plan that was edited behind your back is detected (a stored hash of scope and phases) and no further phase starts.
+* **A new session picks up where the last stopped**: the plan record holds the state, not the conversation.
+* Plans are saved next to the task records (`PLAN-YYYY-NNN.md`) and found by `search_history.sh`.
+
+The enforcement hooks apply per phase: the agent can edit only the files the phase allows ([04](./04-safety-and-enforcement.md)).
+
 ## Risk levels
 
 | Risk | Examples | What to expect |

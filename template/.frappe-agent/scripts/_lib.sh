@@ -32,3 +32,8 @@ print_card() {
 card_field() {
   print_card "$1" | sed -n "s/^- \*\*$2:\*\* *//p" | head -1 | sed 's/ *<!--.*-->//'
 }
+
+# The task the agent is working on now. new_task.sh and task_state.sh keep
+# this pointer (a file named .active in the history directory); hooks/guard.sh
+# reads it to decide whether editing app code is allowed.
+active_file() { printf '%s/.active' "$(history_dir)"; }

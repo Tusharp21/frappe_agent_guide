@@ -4,6 +4,8 @@
 
 Each MEDIUM and HIGH task gets one record, `tasks/TASK-YYYY-NNN.md`, created by `scripts/new_task.sh` and filled as the task progresses. It is both the history (what was asked, decided, done) and the audit (what ran, real test output, who approved, which commit). LOW tasks get a short summary only; change this with `history.record_for` ([02](./02-configuration.md)).
 
+Large work also gets one plan record, `tasks/PLAN-YYYY-NNN.md` (`new_plan.sh`): the approved scope, the phase table with each phase's task, the change requests and the final acceptance. It sits in the same folder, so `search_history.sh` and your sharing setup treat it like a task record.
+
 A record starts with a short **card** (task ID, title, state, risk, decision, locked solution, files, tests, approval, commit, deployment), then a state log with timestamps, then the sections for each step. The card is what future tasks read.
 
 ## Finding old work
